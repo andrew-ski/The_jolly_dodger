@@ -1,0 +1,30 @@
+{
+    "name": "The Jolly Dodger",
+    "version": "1.0.0",
+    "description": "",
+    "dependencies": {
+        "device": "*",
+        "animation": "*",
+        "block-menu": "github:riknoll/arcade-custom-menu#v0.0.1",
+        "arcade-sprite-data": "github:microsoft/arcade-sprite-data#v0.1.0",
+        "darts": "*"
+    },
+    "files": [
+        "main.blocks",
+        "main.ts",
+        "README.md",
+        "tilemap.g.jres",
+        "tilemap.g.ts"
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "targetVersions": {
+        "target": "1.2.10",
+        "targetId": "arcade"
+    },
+    "supportedTargets": [
+        "arcade"
+    ],
+    "preferredEditor": "blocksprj"
+}
