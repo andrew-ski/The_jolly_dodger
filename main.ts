@@ -16,6 +16,8 @@ namespace SpriteKind {
     export const TreasureHUD = SpriteKind.create()
     export const IronSides = SpriteKind.create()
     export const Boss = SpriteKind.create()
+    export const East_Boss_Cannon = SpriteKind.create()
+    export const Boss_Cannonball = SpriteKind.create()
 }
 function Set_Cannons () {
     for (let value of sprites.allOfKind(SpriteKind.Cannon)) {
@@ -2158,10 +2160,13 @@ function NumberFun () {
     Dubloon_Second_Digit = sprites.create(Numbers_array[10], SpriteKind.Number)
     Dubloon_Third_Digit = sprites.create(Numbers_array[10], SpriteKind.Number)
 }
+sprites.onOverlap(SpriteKind.Wind, SpriteKind.Boss, function (sprite, otherSprite) {
+    sprite.destroy()
+})
 function level5 () {
     EnemyCount = 0
     Boss_Stage = 0
-    tiles.setTilemap(tiles.createTilemap(hex`0a000a0003010101010101010103010101010101010101010101010101010101010101010101010101010101010101010101010101010201010101010101010101010101010101010101010101010101010101010101010101010101010103010101010101010103`, img`
+    tiles.setTilemap(tiles.createTilemap(hex`0a000b000201010101010101010201010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010102010101010101010102`, img`
         . . . . . . . . . . 
         . . . . . . . . . . 
         . . . . . . . . . . 
@@ -2172,7 +2177,8 @@ function level5 () {
         . . . . . . . . . . 
         . . . . . . . . . . 
         . . . . . . . . . . 
-        `, [myTiles.transparency16,myTiles.tile23,myTiles.tile4,myTiles.tile19], TileScale.Sixteen))
+        . . . . . . . . . . 
+        `, [myTiles.transparency16,myTiles.tile23,myTiles.tile19], TileScale.Sixteen))
     scene.setBackgroundColor(8)
     Init_Ship()
 }
@@ -2397,7 +2403,6 @@ function Gulls () {
     150,
     true
     )
-    Gull.setFlag(SpriteFlag.RelativeToCamera, false)
     Gull.z = 40
     Gull.setFlag(SpriteFlag.Ghost, true)
     Gull.setFlag(SpriteFlag.AutoDestroy, true)
@@ -2639,7 +2644,11 @@ function Gusts () {
     )
     Gust.z = 40
     Gust.setFlag(SpriteFlag.AutoDestroy, true)
-    Gust.setFlag(SpriteFlag.BounceOnWall, true)
+    if (Boss_Stage == 3) {
+        Gust.lifespan = 3000
+    } else {
+        Gust.setFlag(SpriteFlag.BounceOnWall, true)
+    }
     if (Math.percentChance(50)) {
         Rand_x = Ship.x - 80
         Rand_y = Ship.y - randint(5, 115)
@@ -2662,6 +2671,55 @@ function Gusts () {
         }
     }
 }
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.East_Boss_Cannon, function (sprite, otherSprite) {
+    sprite.destroy()
+    animation.runImageAnimation(
+    otherSprite,
+    [img`
+        ......................1..
+        ................1....111.
+        ............111.111111111
+        .111111111111111111111111
+        1555555555555555111111111
+        1555554444444444111111111
+        1544444444444444111......
+        144444444444444411.......
+        144444444444444411.......
+        144444444222222211.......
+        1444222222222222111......
+        1422222222222222111111111
+        1222222222222222111111111
+        .111111111111111111111111
+        ............111.111111111
+        ................1....111.
+        ......................1..
+        `,img`
+        ......................f..
+        ................f....fff.
+        ............fff.fffffffff
+        .ffffffffffffffffffffffff
+        fdddddddddddddddfffffffff
+        fdddddbbbbbbbbbbfffffffff
+        fdbbbbbbbbbbbbbbfff......
+        fbbbbbbbbbbbbbbbff.......
+        fbbbbbbbbbbbbbbbfc.......
+        fbbbbbbbbcccccccff.......
+        fbbbccccccccccccfff......
+        fbccccccccccccccfffffffff
+        fcccccccccccccccfffffffff
+        .ffffffffffffffffffffffff
+        ............fff.fffffffff
+        ................f....fff.
+        ......................f..
+        `],
+    100,
+    false
+    )
+    sprites.changeDataNumberBy(otherSprite, "Life", -1)
+    if (sprites.readDataNumber(otherSprite, "Life") == 0) {
+        otherSprite.destroy(effects.fire, 500)
+    }
+})
 sprites.onOverlap(SpriteKind.Wind, SpriteKind.Player, function (sprite, otherSprite) {
     if (sprite.x > otherSprite.x) {
         otherSprite.vx += -50
@@ -3998,6 +4056,8 @@ function Boss_Script2 () {
         Boss_Stage = 2
     } else if (game.runtime() > TIMER + 5000 && (EnemyCount == 0 && Boss_Stage == 2)) {
         Dreadship_East = sprites.create(img`
+            ....................facfbbbbbbbb
+            ...................faccfbbbbbbbb
             ...................facfbbbbbbbbc
             ..................faccfbbbbbbbbc
             ..................facfbbbbbbbbcd
@@ -4019,23 +4079,23 @@ function Boss_Script2 () {
             .............faccfbbbbbbbbcdcbbb
             .............faccfbbbbbbbbcdcbbb
             .............faccfbbbbbbbbcdcccc
-            .............faccfbbbbbfbbcddddd
-            .............faccfbbbbfffbcccccc
-            .............fffcfffffffffbbbbbb
-            ..ffffffffffffffffffffffffbbbbbb
-            .fdddddddddddddddfffffffffbbbbbb
-            .fdddddbbbbbbbbbbfffffffffbbbbbb
-            .fdbbbbbbbbbbbbbbfffbbbbbbbbbbbb
-            .fbbbbbbbbbbbbbbbffbbbbbbbbbbbbb
-            .fbbbbbbbbbbbbbbbfcbbbbbbbbbbbbb
-            .fbbbbbbbbcccccccffbbbbbbbbbbbbb
-            .fbbbccccccccccccfffbbbbbbbbbbbb
-            .fbccccccccccccccfffffffffbbbbbb
-            .fcccccccccccccccfffffffffbbbbbb
-            ..ffffffffffffffffffffffffbbbbbb
-            .............fffcfffffffffbbbbbb
-            .............faccfbbbbfffbcccccc
-            .............faccfbbbbbfbbcddddd
+            .............faccfbbbbbbbbcddddd
+            .............faccfbbbbbbbbcccccc
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbcccccc
+            .............faccfbbbbbbbbcddddd
             .............faccfbbbbbbbbcdcccc
             .............faccfbbbbbbbbcdcbbb
             .............faccfbbbbbbbbcdcbbb
@@ -4061,43 +4121,24 @@ function Boss_Script2 () {
             .............faccfbbbbbbbbcdcbbb
             .............faccfbbbbbbbbcdcbbb
             .............faccfbbbbbbbbcdcbbb
-            .............faccfbbbbbbbbcdcbbb
-            .............faccfbbbbbbbbcdcbbb
-            .............faccfbbbbbbbbcdcbbb
-            .............faccfbbbbbbbbcdcbbb
-            .............faccfbbbbbbbbcdcbbb
-            .............faccfbbbbbbbbcdcbbb
-            .............faccfbbbbbbbbcdcbbb
-            .............faccfbbbbbbbbcdcbbb
-            .............faccfbbbbbbbbcdcbbb
-            .............faccfbbbbbbbbcdcbbb
-            .............faccfbbbbbbbbcdcbbb
-            .............faccfbbbbbbbbcdcbbb
-            .............faccfbbbbbbbbcdcbbb
-            .............faccfbbbbbbbbcdcbbb
-            .............faccfbbbbbbbbcdcbbb
-            .............faccfbbbbbbbbcdcbbb
-            .............faccfbbbbbbbbcdcbbb
-            .............faccfbbbbbbbbcdcbbb
-            .............faccfbbbbbbbbcdcbbb
             .............faccfbbbbbbbbcdcccc
-            .............faccfbbbbbfbbcddddd
-            .............faccfbbbbfffbcccccc
-            .............fffcfffffffffbbbbbb
-            ..ffffffffffffffffffffffffbbbbbb
-            .fdddddddddddddddfffffffffbbbbbb
-            .fdddddbbbbbbbbbbfffffffffbbbbbb
-            .fdbbbbbbbbbbbbbbfffbbbbbbbbbbbb
-            .fbbbbbbbbbbbbbbbffbbbbbbbbbbbbb
-            .fbbbbbbbbbbbbbbbfcbbbbbbbbbbbbb
-            .fbbbbbbbbcccccccffbbbbbbbbbbbbb
-            .fbbbccccccccccccfffbbbbbbbbbbbb
-            .fbccccccccccccccfffffffffbbbbbb
-            .fcccccccccccccccfffffffffbbbbbb
-            ..ffffffffffffffffffffffffbbbbbb
-            .............fffcfffffffffbbbbbb
-            .............faccfbbbbfffbcccccc
-            .............faccfbbbbbfbbcddddd
+            .............faccfbbbbbbbbcddddd
+            .............faccfbbbbbbbbcccccc
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbcccccc
+            .............faccfbbbbbbbbcddddd
             .............faccfbbbbbbbbcdcccc
             .............faccfbbbbbbbbcdcbbb
             .............faccfbbbbbbbbcdcbbb
@@ -4123,6 +4164,30 @@ function Boss_Script2 () {
             .............faccfbbbbbbbbcdcbbb
             .............faccfbbbbbbbbcdcbbb
             .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcccc
+            .............faccfbbbbbbbbcddddd
+            .............faccfbbbbbbbbcccccc
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbcccccc
+            .............faccfbbbbbbbbcddddd
+            .............faccfbbbbbbbbcdcccc
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
             .............faccfbbbbbbbbcdcbbb
             .............faccfbbbbbbbbcdcbbb
             .............faccfbbbbbbbbcdcbbb
@@ -4143,24 +4208,28 @@ function Boss_Script2 () {
             .............faccfbbbbbbbbcdcbbb
             .............faccfbbbbbbbbcdcbbb
             .............faccfbbbbbbbbcdcccc
-            .............faccfbbbbbfbbcddddd
-            .............faccfbbbbfffbcccccc
-            .............fffcfffffffffbbbbbb
-            ..ffffffffffffffffffffffffbbbbbb
-            .fdddddddddddddddfffffffffbbbbbb
-            .fdddddbbbbbbbbbbfffffffffbbbbbb
-            .fdbbbbbbbbbbbbbbfffbbbbbbbbbbbb
-            .fbbbbbbbbbbbbbbbffbbbbbbbbbbbbb
-            .fbbbbbbbbbbbbbbbfcbbbbbbbbbbbbb
-            .fbbbbbbbbcccccccffbbbbbbbbbbbbb
-            .fbbbccccccccccccfffbbbbbbbbbbbb
-            .fbccccccccccccccfffffffffbbbbbb
-            .fcccccccccccccccfffffffffbbbbbb
-            ..ffffffffffffffffffffffffbbbbbb
-            .............fffcfffffffffbbbbbb
-            .............faccfbbbbfffbcccccc
-            .............faccfbbbbbfbbcddddd
+            .............faccfbbbbbbbbcddddd
+            .............faccfbbbbbbbbcccccc
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbbbbbbb
+            .............faccfbbbbbbbbcccccc
+            .............faccfbbbbbbbbcddddd
             .............faccfbbbbbbbbcdcccc
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
             .............faccfbbbbbbbbcdcbbb
             .............faccfbbbbbbbbcdcbbb
             .............faccfbbbbbbbbcdcbbb
@@ -4175,15 +4244,99 @@ function Boss_Script2 () {
             .............faccfbbbbbbbbcdcbbb
             .............faccfbbbbbbbbcdcbbb
             `, SpriteKind.Boss)
-        Dreadship_East.setPosition(144, 80)
+        Dreadship_East.setPosition(144, 88)
         Dreadship_East.z = 10
+        Boss_Cannon_East1 = sprites.create(img`
+            ......................f..
+            ................f....fff.
+            ............fff.fffffffff
+            .ffffffffffffffffffffffff
+            fdddddddddddddddfffffffff
+            fdddddbbbbbbbbbbfffffffff
+            fdbbbbbbbbbbbbbbfff......
+            fbbbbbbbbbbbbbbbff.......
+            fbbbbbbbbbbbbbbbfc.......
+            fbbbbbbbbcccccccff.......
+            fbbbccccccccccccfff......
+            fbccccccccccccccfffffffff
+            fcccccccccccccccfffffffff
+            .ffffffffffffffffffffffff
+            ............fff.fffffffff
+            ................f....fff.
+            ......................f..
+            `, SpriteKind.East_Boss_Cannon)
+        sprites.setDataNumber(Boss_Cannon_East1, "Life", 10)
+        Boss_Cannon_East1.z = 11
+        Boss_Cannon_East2 = sprites.create(img`
+            ......................f..
+            ................f....fff.
+            ............fff.fffffffff
+            .ffffffffffffffffffffffff
+            fdddddddddddddddfffffffff
+            fdddddbbbbbbbbbbfffffffff
+            fdbbbbbbbbbbbbbbfff......
+            fbbbbbbbbbbbbbbbff.......
+            fbbbbbbbbbbbbbbbfc.......
+            fbbbbbbbbcccccccff.......
+            fbbbccccccccccccfff......
+            fbccccccccccccccfffffffff
+            fcccccccccccccccfffffffff
+            .ffffffffffffffffffffffff
+            ............fff.fffffffff
+            ................f....fff.
+            ......................f..
+            `, SpriteKind.East_Boss_Cannon)
+        sprites.setDataNumber(Boss_Cannon_East2, "Life", 10)
+        Boss_Cannon_East2.z = 11
+        Boss_Cannon_East3 = sprites.create(img`
+            ......................f..
+            ................f....fff.
+            ............fff.fffffffff
+            .ffffffffffffffffffffffff
+            fdddddddddddddddfffffffff
+            fdddddbbbbbbbbbbfffffffff
+            fdbbbbbbbbbbbbbbfff......
+            fbbbbbbbbbbbbbbbff.......
+            fbbbbbbbbbbbbbbbfc.......
+            fbbbbbbbbcccccccff.......
+            fbbbccccccccccccfff......
+            fbccccccccccccccfffffffff
+            fcccccccccccccccfffffffff
+            .ffffffffffffffffffffffff
+            ............fff.fffffffff
+            ................f....fff.
+            ......................f..
+            `, SpriteKind.East_Boss_Cannon)
+        sprites.setDataNumber(Boss_Cannon_East3, "Life", 10)
+        Boss_Cannon_East3.z = 11
+        Boss_Cannon_East4 = sprites.create(img`
+            ......................f..
+            ................f....fff.
+            ............fff.fffffffff
+            .ffffffffffffffffffffffff
+            fdddddddddddddddfffffffff
+            fdddddbbbbbbbbbbfffffffff
+            fdbbbbbbbbbbbbbbfff......
+            fbbbbbbbbbbbbbbbff.......
+            fbbbbbbbbbbbbbbbfc.......
+            fbbbbbbbbcccccccff.......
+            fbbbccccccccccccfff......
+            fbccccccccccccccfffffffff
+            fcccccccccccccccfffffffff
+            .ffffffffffffffffffffffff
+            ............fff.fffffffff
+            ................f....fff.
+            ......................f..
+            `, SpriteKind.East_Boss_Cannon)
+        sprites.setDataNumber(Boss_Cannon_East4, "Life", 10)
+        Boss_Cannon_East4.z = 11
         animation.runMovementAnimation(
         Dreadship_East,
         animation.animationPresets(animation.bobbing),
-        3000,
+        4000,
         true
         )
-        EnemyCount += 1
+        EnemyCount += 4
         Boss_Stage = 3
     } else {
     	
@@ -4521,10 +4674,14 @@ blockMenu.onMenuOptionSelected(function (option, index) {
     }
 })
 let Caraval_Projectile: Sprite = null
-let projectile: Sprite = null
+let Boss_CannonBall: Sprite = null
 let EnemyCannonBall: Sprite = null
 let FlagSprite2: Sprite = null
 let CannonBall: Sprite = null
+let Boss_Cannon_East4: Sprite = null
+let Boss_Cannon_East3: Sprite = null
+let Boss_Cannon_East2: Sprite = null
+let Boss_Cannon_East1: Sprite = null
 let Dreadship_East: Sprite = null
 let TIMER = 0
 let Cannon_Tower: Sprite = null
@@ -4647,7 +4804,13 @@ game.showLongText("Find sunken treasure and throw your net (B) to pull it in. Ca
 Shop()
 game.onUpdate(function () {
     if (!(blockMenu.isMenuOpen())) {
-        Boss_Script()
+        Boss_Script2()
+        if (Boss_Stage == 3) {
+            Boss_Cannon_East1.setPosition(Dreadship_East.x + -2, Dreadship_East.y + -61)
+            Boss_Cannon_East2.setPosition(Dreadship_East.x + -2, Dreadship_East.y + -18)
+            Boss_Cannon_East3.setPosition(Dreadship_East.x + -2, Dreadship_East.y + 25)
+            Boss_Cannon_East4.setPosition(Dreadship_East.x + -2, Dreadship_East.y + 68)
+        }
     }
 })
 game.onUpdate(function () {
@@ -5347,50 +5510,71 @@ game.onUpdateInterval(1000, function () {
 })
 game.onUpdateInterval(1500, function () {
     if (Boss_Stage == 3) {
-        projectile = sprites.createProjectileFromSprite(img`
-            . . b b b b b . . 
-            . b c c c c c b . 
-            b c c c c b b c b 
-            b c c c c c b c b 
-            b c c c c c c c b 
-            b c c c c c c c b 
-            b c b c c c c c b 
-            . b c c c c c b . 
-            . . b b b b b . . 
-            `, Dreadship_East, -75, 0)
-        projectile.setPosition(Dreadship_East.x + 12, Dreadship_East.y + 4)
-        projectile.z = 4
-        projectile = sprites.createProjectileFromSprite(img`
-            . . b b b b b . . 
-            . b c c c c c b . 
-            b c c c c b b c b 
-            b c c c c c b c b 
-            b c c c c c c c b 
-            b c c c c c c c b 
-            b c b c c c c c b 
-            . b c c c c c b . 
-            . . b b b b b . . 
-            `, Dreadship_East, -75, 0)
-        projectile.setPosition(Dreadship_East.x, Dreadship_East.y + -58)
-        projectile.z = 4
-        projectile = sprites.createProjectileFromSprite(img`
-            . . b b b b b . . 
-            . b c c c c c b . 
-            b c c c c b b c b 
-            b c c c c c b c b 
-            b c c c c c c c b 
-            b c c c c c c c b 
-            b c b c c c c c b 
-            . b c c c c c b . 
-            . . b b b b b . . 
-            `, Dreadship_East, -75, 0)
-        projectile.setPosition(Dreadship_East.x, Dreadship_East.y + 66)
-        projectile.z = 4
+        if (sprites.readDataNumber(Boss_Cannon_East1, "Life") > 0 && Math.percentChance(50)) {
+            Boss_CannonBall = sprites.createProjectileFromSprite(img`
+                . . b b b b b . . 
+                . b c c c c c b . 
+                b c c c c b b c b 
+                b c c c c c b c b 
+                b c c c c c c c b 
+                b c c c c c c c b 
+                b c b c c c c c b 
+                . b c c c c c b . 
+                . . b b b b b . . 
+                `, Boss_Cannon_East1, -75, 0)
+            Boss_CannonBall.setKind(SpriteKind.Boss_Cannonball)
+            Boss_CannonBall.z = 4
+        }
+        if (sprites.readDataNumber(Boss_Cannon_East2, "Life") > 0 && Math.percentChance(50)) {
+            Boss_CannonBall = sprites.createProjectileFromSprite(img`
+                . . b b b b b . . 
+                . b c c c c c b . 
+                b c c c c b b c b 
+                b c c c c c b c b 
+                b c c c c c c c b 
+                b c c c c c c c b 
+                b c b c c c c c b 
+                . b c c c c c b . 
+                . . b b b b b . . 
+                `, Boss_Cannon_East2, -75, 0)
+            Boss_CannonBall.setKind(SpriteKind.Boss_Cannonball)
+            Boss_CannonBall.z = 4
+        }
+        if (sprites.readDataNumber(Boss_Cannon_East3, "Life") > 0 && Math.percentChance(50)) {
+            Boss_CannonBall = sprites.createProjectileFromSprite(img`
+                . . b b b b b . . 
+                . b c c c c c b . 
+                b c c c c b b c b 
+                b c c c c c b c b 
+                b c c c c c c c b 
+                b c c c c c c c b 
+                b c b c c c c c b 
+                . b c c c c c b . 
+                . . b b b b b . . 
+                `, Boss_Cannon_East3, -75, 0)
+            Boss_CannonBall.setKind(SpriteKind.Boss_Cannonball)
+            Boss_CannonBall.z = 4
+        }
+        if (sprites.readDataNumber(Boss_Cannon_East4, "Life") > 0) {
+            Boss_CannonBall = sprites.createProjectileFromSprite(img`
+                . . b b b b b . . 
+                . b c c c c c b . 
+                b c c c c b b c b 
+                b c c c c c b c b 
+                b c c c c c c c b 
+                b c c c c c c c b 
+                b c b c c c c c b 
+                . b c c c c c b . 
+                . . b b b b b . . 
+                `, Boss_Cannon_East4, -75, 0)
+            Boss_CannonBall.setKind(SpriteKind.Boss_Cannonball)
+            Boss_CannonBall.z = 4
+        }
     }
 })
 game.onUpdateInterval(1500, function () {
     if (!(blockMenu.isMenuOpen())) {
-        if (Level == 4 && Math.percentChance(20)) {
+        if (Level >= 1 && Math.percentChance(20)) {
             Gusts()
         }
         if (Level < 5 && Math.percentChance(25)) {
