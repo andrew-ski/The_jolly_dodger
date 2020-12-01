@@ -15,6 +15,7 @@ namespace SpriteKind {
     export const Wind = SpriteKind.create()
     export const TreasureHUD = SpriteKind.create()
     export const IronSides = SpriteKind.create()
+    export const Boss = SpriteKind.create()
 }
 function Set_Cannons () {
     for (let value of sprites.allOfKind(SpriteKind.Cannon)) {
@@ -259,7 +260,7 @@ function Init_Ship () {
     Set_Cannons()
     for (let value2 of tiles.getTilesByType(myTiles.tile4)) {
         tiles.placeOnRandomTile(Ship, myTiles.tile4)
-        tiles.setTileAt(value2, myTiles.tile1)
+        tiles.setTileAt(value2, myTiles.transparency16)
     }
     HUDsprites()
 }
@@ -701,7 +702,7 @@ function SunkenTreasure () {
             .66666666666666.....
             `, SpriteKind.Treasure)
         tiles.placeOnTile(Sunken_Treasure, value3)
-        tiles.setTileAt(value3, myTiles.tile1)
+        tiles.setTileAt(value3, myTiles.transparency16)
     }
 }
 function level4 () {
@@ -1975,6 +1976,80 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.CannonTower, function (sprite, o
     }
     HUDdigits()
 })
+function Boss_Rowboats () {
+    RowBoat = sprites.create(img`
+        . . . . . . b b . . . . . . 
+        . . . . . . b b . . . . . . 
+        . . . . . f b b f . . . . . 
+        . . . . . f f f f . . . . . 
+        . . . . f 4 f f 4 f . . . . 
+        . . . . f e e e e f . . . . 
+        . . . . f e e e e f . . . . 
+        . . . . f d e e d f . . . . 
+        e e e e e e e e e e e e e e 
+        . . . . f d e e d f . . . . 
+        . . . . f e e e e f . . . . 
+        . . . . f d e e d f . . . . 
+        . . . . f f f f f f . . . . 
+        `, SpriteKind.Rowboat)
+    RowBoat.setPosition(100, 30)
+    RowBoat.z = 6
+    EnemyCount += 1
+    RowBoat = sprites.create(img`
+        . . . . . . b b . . . . . . 
+        . . . . . . b b . . . . . . 
+        . . . . . f b b f . . . . . 
+        . . . . . f f f f . . . . . 
+        . . . . f 4 f f 4 f . . . . 
+        . . . . f e e e e f . . . . 
+        . . . . f e e e e f . . . . 
+        . . . . f d e e d f . . . . 
+        e e e e e e e e e e e e e e 
+        . . . . f d e e d f . . . . 
+        . . . . f e e e e f . . . . 
+        . . . . f d e e d f . . . . 
+        . . . . f f f f f f . . . . 
+        `, SpriteKind.Rowboat)
+    RowBoat.setPosition(130, 65)
+    RowBoat.z = 6
+    EnemyCount += 1
+    RowBoat = sprites.create(img`
+        . . . . . . b b . . . . . . 
+        . . . . . . b b . . . . . . 
+        . . . . . f b b f . . . . . 
+        . . . . . f f f f . . . . . 
+        . . . . f 4 f f 4 f . . . . 
+        . . . . f e e e e f . . . . 
+        . . . . f e e e e f . . . . 
+        . . . . f d e e d f . . . . 
+        e e e e e e e e e e e e e e 
+        . . . . f d e e d f . . . . 
+        . . . . f e e e e f . . . . 
+        . . . . f d e e d f . . . . 
+        . . . . f f f f f f . . . . 
+        `, SpriteKind.Rowboat)
+    RowBoat.setPosition(100, 100)
+    RowBoat.z = 6
+    EnemyCount += 1
+    RowBoat = sprites.create(img`
+        . . . . . . b b . . . . . . 
+        . . . . . . b b . . . . . . 
+        . . . . . f b b f . . . . . 
+        . . . . . f f f f . . . . . 
+        . . . . f 4 f f 4 f . . . . 
+        . . . . f e e e e f . . . . 
+        . . . . f e e e e f . . . . 
+        . . . . f d e e d f . . . . 
+        e e e e e e e e e e e e e e 
+        . . . . f d e e d f . . . . 
+        . . . . f e e e e f . . . . 
+        . . . . f d e e d f . . . . 
+        . . . . f f f f f f . . . . 
+        `, SpriteKind.Rowboat)
+    RowBoat.setPosition(130, 130)
+    RowBoat.z = 6
+    EnemyCount += 1
+}
 function NumberFun () {
     Numbers_array = [
     img`
@@ -2082,6 +2157,24 @@ function NumberFun () {
     Dubloon_First_Digit = sprites.create(Numbers_array[10], SpriteKind.Number)
     Dubloon_Second_Digit = sprites.create(Numbers_array[10], SpriteKind.Number)
     Dubloon_Third_Digit = sprites.create(Numbers_array[10], SpriteKind.Number)
+}
+function level5 () {
+    EnemyCount = 0
+    Boss_Stage = 0
+    tiles.setTilemap(tiles.createTilemap(hex`0a000a0003010101010101010103010101010101010101010101010101010101010101010101010101010101010101010101010101010201010101010101010101010101010101010101010101010101010101010101010101010101010103010101010101010103`, img`
+        . . . . . . . . . . 
+        . . . . . . . . . . 
+        . . . . . . . . . . 
+        . . . . . . . . . . 
+        . . . . . . . . . . 
+        . . . . . . . . . . 
+        . . . . . . . . . . 
+        . . . . . . . . . . 
+        . . . . . . . . . . 
+        . . . . . . . . . . 
+        `, [myTiles.transparency16,myTiles.tile23,myTiles.tile4,myTiles.tile19], TileScale.Sixteen))
+    scene.setBackgroundColor(8)
+    Init_Ship()
 }
 function Dock2 () {
     for (let value4 of tiles.getTilesByType(myTiles.tile15)) {
@@ -2216,7 +2309,7 @@ function Ironside () {
         tiles.placeOnTile(IronSides, value)
         IronSides.z = 6
         sprites.setDataNumber(IronSides, "Life", 5)
-        tiles.setTileAt(value, myTiles.tile1)
+        tiles.setTileAt(value, myTiles.transparency16)
         EnemyCount += 1
     }
 }
@@ -2830,9 +2923,12 @@ function Caraval2 () {
         tiles.placeOnTile(CaravalShip, value)
         CaravalShip.z = 6
         sprites.setDataNumber(CaravalShip, "Life", 3)
-        tiles.setTileAt(value, myTiles.tile1)
+        tiles.setTileAt(value, myTiles.transparency16)
         EnemyCount += 1
     }
+}
+function Boss_Script () {
+	
 }
 function Orient_Cannons () {
     if (Owns_Port_Cannon == true) {
@@ -3867,7 +3963,7 @@ function CannonTower2 () {
         tiles.placeOnTile(Cannon_Tower, value7)
         sprites.setDataNumber(Cannon_Tower, "ID", Tower_ID)
         sprites.setDataNumber(Cannon_Tower, "Life", TowerHealth)
-        tiles.setTileAt(value7, myTiles.tile1)
+        tiles.setTileAt(value7, myTiles.transparency16)
         EnemyCount += 1
     }
 }
@@ -3890,21 +3986,212 @@ function rowBoat () {
             `, SpriteKind.Rowboat)
         tiles.placeOnTile(RowBoat, value8)
         RowBoat.z = 6
-        tiles.setTileAt(value8, myTiles.tile1)
+        tiles.setTileAt(value8, myTiles.transparency16)
         EnemyCount += 1
+    }
+}
+function Boss_Script2 () {
+    if (EnemyCount == 0 && Boss_Stage == 0) {
+        Boss_Stage = 1
+    } else if (EnemyCount == 0 && Boss_Stage == 1) {
+        TIMER = game.runtime()
+        Boss_Stage = 2
+    } else if (game.runtime() > TIMER + 5000 && (EnemyCount == 0 && Boss_Stage == 2)) {
+        Dreadship_East = sprites.create(img`
+            ...................facfbbbbbbbbc
+            ..................faccfbbbbbbbbc
+            ..................facfbbbbbbbbcd
+            .................faccfbbbbbbbbcd
+            .................facfbbbbbbbbcdc
+            ................faccfbbbbbbbbcdc
+            ................facfbbbbbbbbcdcb
+            ................facfbbbbbbbbcdcb
+            ...............faccfbbbbbbbbcdcb
+            ...............faccfbbbbbbbbcdcb
+            ..............faccfbbbbbbbbcdcbb
+            ..............faccfbbbbbbbbcdcbb
+            ..............faccfbbbbbbbbcdcbb
+            .............facccfbbbbbbbbcdcbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcccc
+            .............faccfbbbbbfbbcddddd
+            .............faccfbbbbfffbcccccc
+            .............fffcfffffffffbbbbbb
+            ..ffffffffffffffffffffffffbbbbbb
+            .fdddddddddddddddfffffffffbbbbbb
+            .fdddddbbbbbbbbbbfffffffffbbbbbb
+            .fdbbbbbbbbbbbbbbfffbbbbbbbbbbbb
+            .fbbbbbbbbbbbbbbbffbbbbbbbbbbbbb
+            .fbbbbbbbbbbbbbbbfcbbbbbbbbbbbbb
+            .fbbbbbbbbcccccccffbbbbbbbbbbbbb
+            .fbbbccccccccccccfffbbbbbbbbbbbb
+            .fbccccccccccccccfffffffffbbbbbb
+            .fcccccccccccccccfffffffffbbbbbb
+            ..ffffffffffffffffffffffffbbbbbb
+            .............fffcfffffffffbbbbbb
+            .............faccfbbbbfffbcccccc
+            .............faccfbbbbbfbbcddddd
+            .............faccfbbbbbbbbcdcccc
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcccc
+            .............faccfbbbbbfbbcddddd
+            .............faccfbbbbfffbcccccc
+            .............fffcfffffffffbbbbbb
+            ..ffffffffffffffffffffffffbbbbbb
+            .fdddddddddddddddfffffffffbbbbbb
+            .fdddddbbbbbbbbbbfffffffffbbbbbb
+            .fdbbbbbbbbbbbbbbfffbbbbbbbbbbbb
+            .fbbbbbbbbbbbbbbbffbbbbbbbbbbbbb
+            .fbbbbbbbbbbbbbbbfcbbbbbbbbbbbbb
+            .fbbbbbbbbcccccccffbbbbbbbbbbbbb
+            .fbbbccccccccccccfffbbbbbbbbbbbb
+            .fbccccccccccccccfffffffffbbbbbb
+            .fcccccccccccccccfffffffffbbbbbb
+            ..ffffffffffffffffffffffffbbbbbb
+            .............fffcfffffffffbbbbbb
+            .............faccfbbbbfffbcccccc
+            .............faccfbbbbbfbbcddddd
+            .............faccfbbbbbbbbcdcccc
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcccc
+            .............faccfbbbbbfbbcddddd
+            .............faccfbbbbfffbcccccc
+            .............fffcfffffffffbbbbbb
+            ..ffffffffffffffffffffffffbbbbbb
+            .fdddddddddddddddfffffffffbbbbbb
+            .fdddddbbbbbbbbbbfffffffffbbbbbb
+            .fdbbbbbbbbbbbbbbfffbbbbbbbbbbbb
+            .fbbbbbbbbbbbbbbbffbbbbbbbbbbbbb
+            .fbbbbbbbbbbbbbbbfcbbbbbbbbbbbbb
+            .fbbbbbbbbcccccccffbbbbbbbbbbbbb
+            .fbbbccccccccccccfffbbbbbbbbbbbb
+            .fbccccccccccccccfffffffffbbbbbb
+            .fcccccccccccccccfffffffffbbbbbb
+            ..ffffffffffffffffffffffffbbbbbb
+            .............fffcfffffffffbbbbbb
+            .............faccfbbbbfffbcccccc
+            .............faccfbbbbbfbbcddddd
+            .............faccfbbbbbbbbcdcccc
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            .............faccfbbbbbbbbcdcbbb
+            `, SpriteKind.Boss)
+        Dreadship_East.setPosition(144, 80)
+        Dreadship_East.z = 10
+        animation.runMovementAnimation(
+        Dreadship_East,
+        animation.animationPresets(animation.bobbing),
+        3000,
+        true
+        )
+        EnemyCount += 1
+        Boss_Stage = 3
+    } else {
+    	
     }
 }
 function StartGame () {
     HUDdigits()
-    if (Level == 1) {
-        level1()
-    } else if (Level == 2) {
-        Level2()
-    } else if (Level == 3) {
-        level3()
-    } else if (Level == 4) {
-        level4()
-    }
+    level5()
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Rowboat, function (sprite, otherSprite) {
     otherSprite.destroy()
@@ -4234,10 +4521,12 @@ blockMenu.onMenuOptionSelected(function (option, index) {
     }
 })
 let Caraval_Projectile: Sprite = null
+let projectile: Sprite = null
 let EnemyCannonBall: Sprite = null
 let FlagSprite2: Sprite = null
 let CannonBall: Sprite = null
-let RowBoat: Sprite = null
+let Dreadship_East: Sprite = null
+let TIMER = 0
 let Cannon_Tower: Sprite = null
 let TowerHealth = 0
 let Coins: Sprite = null
@@ -4261,12 +4550,14 @@ let Doubloon_HUD: Sprite = null
 let Integrity_HUD: Sprite = null
 let IronSides: Sprite = null
 let Ship_Dock: Sprite = null
+let Boss_Stage = 0
 let Dubloon_Third_Digit: Sprite = null
 let Dubloon_Second_Digit: Sprite = null
 let Dubloon_First_Digit: Sprite = null
 let Integrity_Second_Digit: Sprite = null
 let Integrity_First_Digit: Sprite = null
 let Numbers_array: Image[] = []
+let RowBoat: Sprite = null
 let reflag: Sprite = null
 let ReloadCannon = 0
 let Treasure_Rowboat: Sprite = null
@@ -4354,6 +4645,11 @@ game.setDialogTextColor(4)
 game.showLongText("Outfit your ship, sail into the heart of the enemy and take their treasure!", DialogLayout.Full)
 game.showLongText("Find sunken treasure and throw your net (B) to pull it in. Can't find any sunken treasure? Sink some with your cannons (A).", DialogLayout.Full)
 Shop()
+game.onUpdate(function () {
+    if (!(blockMenu.isMenuOpen())) {
+        Boss_Script()
+    }
+})
 game.onUpdate(function () {
     if (!(blockMenu.isMenuOpen())) {
         Orient_Cannons()
@@ -5050,11 +5346,54 @@ game.onUpdateInterval(1000, function () {
     }
 })
 game.onUpdateInterval(1500, function () {
+    if (Boss_Stage == 3) {
+        projectile = sprites.createProjectileFromSprite(img`
+            . . b b b b b . . 
+            . b c c c c c b . 
+            b c c c c b b c b 
+            b c c c c c b c b 
+            b c c c c c c c b 
+            b c c c c c c c b 
+            b c b c c c c c b 
+            . b c c c c c b . 
+            . . b b b b b . . 
+            `, Dreadship_East, -75, 0)
+        projectile.setPosition(Dreadship_East.x + 12, Dreadship_East.y + 4)
+        projectile.z = 4
+        projectile = sprites.createProjectileFromSprite(img`
+            . . b b b b b . . 
+            . b c c c c c b . 
+            b c c c c b b c b 
+            b c c c c c b c b 
+            b c c c c c c c b 
+            b c c c c c c c b 
+            b c b c c c c c b 
+            . b c c c c c b . 
+            . . b b b b b . . 
+            `, Dreadship_East, -75, 0)
+        projectile.setPosition(Dreadship_East.x, Dreadship_East.y + -58)
+        projectile.z = 4
+        projectile = sprites.createProjectileFromSprite(img`
+            . . b b b b b . . 
+            . b c c c c c b . 
+            b c c c c b b c b 
+            b c c c c c b c b 
+            b c c c c c c c b 
+            b c c c c c c c b 
+            b c b c c c c c b 
+            . b c c c c c b . 
+            . . b b b b b . . 
+            `, Dreadship_East, -75, 0)
+        projectile.setPosition(Dreadship_East.x, Dreadship_East.y + 66)
+        projectile.z = 4
+    }
+})
+game.onUpdateInterval(1500, function () {
     if (!(blockMenu.isMenuOpen())) {
-        if (Level > 3 && Math.percentChance(20)) {
+        if (Level == 4 && Math.percentChance(20)) {
             Gusts()
         }
-        if (Math.percentChance(25)) {
+        if (Level < 5 && Math.percentChance(25)) {
             Gulls()
         } else if (Math.percentChance(5)) {
             Gulls()
