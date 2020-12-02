@@ -214,9 +214,6 @@ function Set_Cannons () {
     }
 }
 function Level_Reset () {
-    EnemyCount = 0
-    Boss_Stage = -1
-    BossCannon_count = 0
     for (let value of sprites.allOfKind(SpriteKind.East_Boss_Cannon)) {
         value.destroy()
     }
@@ -725,6 +722,7 @@ function SunkenTreasure () {
             66..666666666666....
             .66666666666666.....
             `, SpriteKind.Treasure)
+        Sunken_Treasure.z = 0
         tiles.placeOnTile(Sunken_Treasure, value3)
         tiles.setTileAt(value3, myTiles.transparency16)
     }
@@ -1841,7 +1839,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Dock, function (sprite, otherSpr
         Shop()
     } else if (game.runtime() > DockingTimer + 3000) {
         DockingTimer = game.runtime()
-        game.showLongText("You cannot dock here while this port is protected.", DialogLayout.Bottom)
+        game.showLongText("" + EnemyCount + " vessels are guarding this dock.", DialogLayout.Bottom)
     }
 })
 sprites.onOverlap(SpriteKind.Rowboat, SpriteKind.Projectile, function (sprite, otherSprite) {
@@ -1928,7 +1926,7 @@ sprites.onDestroyed(SpriteKind.Rowboat, function (sprite) {
         . 6 6 6 6 . 
         `, SpriteKind.Treasure)
     Treasure_Rowboat.setPosition(sprite.x, sprite.y)
-    Treasure_Rowboat.z = 1
+    Treasure_Rowboat.z = 0
     EnemyCount += -1
     if (EnemyCount == 0) {
         ReFlag()
@@ -2285,9 +2283,10 @@ sprites.onOverlap(SpriteKind.Wind, SpriteKind.Boss, function (sprite, otherSprit
     sprite.destroy()
 })
 function level5 () {
+    BossCannon_count = 0
     EnemyCount = 0
-    Boss_Stage = 0
-    tiles.setTilemap(tiles.createTilemap(hex`0a000b000201010101010101010201010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010102010101010101010102`, img`
+    Boss_Stage = -1
+    tiles.setTilemap(tiles.createTilemap(hex`0a000b000101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010102010101010101010101010101010101010101010101010101010101010101010101010101010101`, img`
         . . . . . . . . . . 
         . . . . . . . . . . 
         . . . . . . . . . . 
@@ -2299,7 +2298,7 @@ function level5 () {
         . . . . . . . . . . 
         . . . . . . . . . . 
         . . . . . . . . . . 
-        `, [myTiles.transparency16,myTiles.tile23,myTiles.tile19], TileScale.Sixteen))
+        `, [myTiles.transparency16,myTiles.tile23,myTiles.tile4], TileScale.Sixteen))
     scene.setBackgroundColor(8)
     Init_Ship()
 }
@@ -3196,7 +3195,7 @@ sprites.onDestroyed(SpriteKind.IronSides, function (sprite) {
         ..................................
         `, SpriteKind.Treasure)
     TreasureCaraval.setPosition(sprite.x, sprite.y)
-    TreasureCaraval.z = 1
+    TreasureCaraval.z = 0
     EnemyCount += -1
     if (EnemyCount == 0) {
         ReFlag()
@@ -4183,9 +4182,7 @@ function Boss_Script2 () {
         Boss_Rowboats()
         Boss_Stage = 1
     }
-    if (EnemyCount == 0 && Boss_Stage == -1) {
-    	
-    } else if (EnemyCount == 0 && Boss_Stage == 1) {
+    if (EnemyCount == 0 && Boss_Stage == 1) {
         Dreadship_East = sprites.create(img`
             ....................facfbbbbbbbb
             ...................faccfbbbbbbbb
@@ -4681,15 +4678,14 @@ function Boss_Script2 () {
         )
         Boss_Stage = 3
         BossCannon_count = 4
-    } else {
-    	
     }
 }
 sprites.onOverlap(SpriteKind.Boss_Cannonball, SpriteKind.Player, function (sprite, otherSprite) {
     Ship_Integrity += -2
     HUDdigits()
     sprite.destroy(effects.fire, 200)
-    otherSprite.x += -15
+    scene.cameraShake(4, 200)
+    otherSprite.x += -10
     if (Ship_Integrity <= 0) {
         otherSprite.destroy()
         Player_Death()
@@ -4697,7 +4693,17 @@ sprites.onOverlap(SpriteKind.Boss_Cannonball, SpriteKind.Player, function (sprit
 })
 function StartGame () {
     HUDdigits()
-    level5()
+    if (Level == 1) {
+        level1()
+    } else if (Level == 2) {
+        Level2()
+    } else if (Level == 3) {
+        level3()
+    } else if (Level == 4) {
+        level4()
+    } else if (Level == 5) {
+        level5()
+    }
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Rowboat, function (sprite, otherSprite) {
     otherSprite.destroy()
@@ -4745,7 +4751,7 @@ sprites.onDestroyed(SpriteKind.Caraval, function (sprite) {
         ..............................
         `, SpriteKind.Treasure)
     TreasureCaraval.setPosition(sprite.x, sprite.y)
-    TreasureCaraval.z = 1
+    TreasureCaraval.z = 0
     EnemyCount += -1
     if (EnemyCount == 0) {
         ReFlag()
@@ -5072,6 +5078,8 @@ let Numbers_array: Image[] = []
 let IronSides: Sprite = null
 let CaravalShip: Sprite = null
 let RowBoat: Sprite = null
+let BossCannon_count = 0
+let Boss_Stage = 0
 let reflag: Sprite = null
 let ReloadCannon = 0
 let Treasure_Rowboat: Sprite = null
@@ -5079,11 +5087,9 @@ let Level_Bonus = 0
 let DockingTimer = 0
 let Net2: Sprite = null
 let NetReload = 0
+let EnemyCount = 0
 let Sunken_Treasure: Sprite = null
 let Ship: Sprite = null
-let BossCannon_count = 0
-let Boss_Stage = 0
-let EnemyCount = 0
 let Stern_Cannon: Sprite = null
 let Starboard_Bow_Cannon: Sprite = null
 let Port_Bow_Cannon: Sprite = null
@@ -5113,15 +5119,15 @@ North = 0
 East = 1
 South = 2
 West = 3
-Ship_Max_Integrity = 20
-Ship_Integrity = 20
-Cannon_Upgrade = true
+Ship_Max_Integrity = 10
+Ship_Integrity = 10
+Cannon_Upgrade = false
 Doubloons = 20
-Owns_Port_Cannon = true
-Owns_Starboard_Cannon = true
-Owns_Port_Bow_Cannon = true
-Owns_Starboard_Bow_Cannon = true
-Owns_Stern_Cannon = true
+Owns_Port_Cannon = false
+Owns_Starboard_Cannon = false
+Owns_Port_Bow_Cannon = false
+Owns_Starboard_Bow_Cannon = false
+Owns_Stern_Cannon = false
 game.setDialogCursor(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
@@ -5163,12 +5169,14 @@ game.showLongText("Find sunken treasure and throw your net (B) to pull it in. Ca
 Shop()
 game.onUpdate(function () {
     if (!(blockMenu.isMenuOpen())) {
-        Boss_Script2()
-        if (Boss_Stage >= 2) {
-            Boss_Cannon_East1.setPosition(Dreadship_East.x + -2, Dreadship_East.y + -61)
-            Boss_Cannon_East2.setPosition(Dreadship_East.x + -2, Dreadship_East.y + -18)
-            Boss_Cannon_East3.setPosition(Dreadship_East.x + -2, Dreadship_East.y + 25)
-            Boss_Cannon_East4.setPosition(Dreadship_East.x + -2, Dreadship_East.y + 68)
+        if (Level == 5) {
+            Boss_Script2()
+            if (Boss_Stage >= 2) {
+                Boss_Cannon_East1.setPosition(Dreadship_East.x + -2, Dreadship_East.y + -61)
+                Boss_Cannon_East2.setPosition(Dreadship_East.x + -2, Dreadship_East.y + -18)
+                Boss_Cannon_East3.setPosition(Dreadship_East.x + -2, Dreadship_East.y + 25)
+                Boss_Cannon_East4.setPosition(Dreadship_East.x + -2, Dreadship_East.y + 68)
+            }
         }
     }
 })
@@ -5940,7 +5948,7 @@ game.onUpdateInterval(1500, function () {
         } else if (BossCannon_count == 3 && Math.percentChance(20)) {
             Gusts()
         }
-        if (Level >= 1 && Math.percentChance(20)) {
+        if (Level >= 4 && Math.percentChance(20)) {
             Gusts()
         }
         if (Level < 5 && Math.percentChance(25)) {
