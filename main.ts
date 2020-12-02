@@ -2313,7 +2313,7 @@ function level5 () {
     BossCannon_count = 0
     EnemyCount = 0
     Boss_Stage = -1
-    tiles.setTilemap(tiles.createTilemap(hex`0a000b000101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010102010101010101010101010101010101010101010101010101010101010101010101010101010101`, img`
+    tiles.setTilemap(tiles.createTilemap(hex`0a000b000101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010101010102010101010101010101010101010101010101010101010101010101010102010101010101010101`, img`
         . . . . . . . . . . 
         . . . . . . . . . . 
         . . . . . . . . . . 
@@ -6104,7 +6104,7 @@ game.onUpdateInterval(1500, function () {
 })
 forever(function () {
     if (Shanties == true) {
-        music.playMelody(music.convertRTTTLToMelody("HIGHBRB1:d=4,o=5,b=0:8d,d,8g,g,8a,a#.,c6,8a#,a.,a#,8a,d.,p,8d,2d,8d,2d6,8d,g,8a,a#,8c6,2d6,8a#,d6,8d6,a#,8d6,c6,8c6,a,8c6,a#,8a#,a,8g,d.,a#4,8c,d,8g,a#,8a,g.,g,8f,d.,g,8f#,2g"), 200)
+        music.playMelody(music.convertRTTTLToMelody("MAUI1:d=4,o=5,b=0:c,c,f,f,e,8c,8c,g#,g#,g,8c6,8a#,g#,f,8g,8f,d#,2f.,8c,8c,f,8f,8f,e,8c,8c,g#,g#,g,8c6,8a#,g#,f,g,d#,2f.,8g#,8a#,c6,c6,c6,8a#,8g#,a#,a#,a#,8g,8g,g#,g#,g,f,2g,c6,8c,8c,f,8f,8f,e,8c,8c,g#,g#,g,8c6,8a#,g#,f,g,g,2f.,8g#,8a#,c.6,8c6,c6,g#,a#.,8a#,a#,8c6,8a#,g#,g#,g#,f,2g,c6,c,f,f,e,8c,8c,g#,g#,g,8c6,8a#,g#,f,8g,8f,d#,2f."), 200)
         music.rest(music.beat(BeatFraction.Breve))
         music.rest(music.beat(BeatFraction.Breve))
     }
@@ -6114,7 +6114,7 @@ forever(function () {
         music.rest(music.beat(BeatFraction.Breve))
     }
     if (Shanties == true) {
-        music.playMelody(music.convertRTTTLToMelody("MAUI1:d=4,o=5,b=0:c,c,f,f,e,8c,8c,g#,g#,g,8c6,8a#,g#,f,8g,8f,d#,2f.,8c,8c,f,8f,8f,e,8c,8c,g#,g#,g,8c6,8a#,g#,f,g,d#,2f.,8g#,8a#,c6,c6,c6,8a#,8g#,a#,a#,a#,8g,8g,g#,g#,g,f,2g,c6,8c,8c,f,8f,8f,e,8c,8c,g#,g#,g,8c6,8a#,g#,f,g,g,2f.,8g#,8a#,c.6,8c6,c6,g#,a#.,8a#,a#,8c6,8a#,g#,g#,g#,f,2g,c6,c,f,f,e,8c,8c,g#,g#,g,8c6,8a#,g#,f,8g,8f,d#,2f."), 200)
+        music.playMelody(music.convertRTTTLToMelody("HIGHBRB1:d=4,o=5,b=0:8d,d,8g,g,8a,a#.,c6,8a#,a.,a#,8a,d.,p,8d,2d,8d,2d6,8d,g,8a,a#,8c6,2d6,8a#,d6,8d6,a#,8d6,c6,8c6,a,8c6,a#,8a#,a,8g,d.,a#4,8c,d,8g,a#,8a,g.,g,8f,d.,g,8f#,2g"), 200)
         music.rest(music.beat(BeatFraction.Breve))
         music.rest(music.beat(BeatFraction.Breve))
     }
