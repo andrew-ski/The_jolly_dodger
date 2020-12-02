@@ -214,6 +214,27 @@ function Set_Cannons () {
     }
 }
 function Level_Reset () {
+    EnemyCount = 0
+    Boss_Stage = -1
+    BossCannon_count = 0
+    for (let value of sprites.allOfKind(SpriteKind.East_Boss_Cannon)) {
+        value.destroy()
+    }
+    for (let value of sprites.allOfKind(SpriteKind.Wind)) {
+        value.destroy()
+    }
+    for (let value of sprites.allOfKind(SpriteKind.Boss_Wake)) {
+        value.destroy()
+    }
+    for (let value of sprites.allOfKind(SpriteKind.Boss_Cannonball)) {
+        value.destroy()
+    }
+    for (let value of sprites.allOfKind(SpriteKind.Boss)) {
+        value.destroy()
+    }
+    for (let value of sprites.allOfKind(SpriteKind.IronSides)) {
+        value.destroy()
+    }
     for (let value of sprites.allOfKind(SpriteKind.Caraval)) {
         value.destroy()
     }
@@ -1980,78 +2001,177 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.CannonTower, function (sprite, o
     HUDdigits()
 })
 function Boss_Rowboats () {
-    RowBoat = sprites.create(img`
-        . . . . . . b b . . . . . . 
-        . . . . . . b b . . . . . . 
-        . . . . . f b b f . . . . . 
-        . . . . . f f f f . . . . . 
-        . . . . f 4 f f 4 f . . . . 
-        . . . . f e e e e f . . . . 
-        . . . . f e e e e f . . . . 
-        . . . . f d e e d f . . . . 
-        e e e e e e e e e e e e e e 
-        . . . . f d e e d f . . . . 
-        . . . . f e e e e f . . . . 
-        . . . . f d e e d f . . . . 
-        . . . . f f f f f f . . . . 
-        `, SpriteKind.Rowboat)
-    RowBoat.setPosition(100, 30)
-    RowBoat.z = 6
-    EnemyCount += 1
-    RowBoat = sprites.create(img`
-        . . . . . . b b . . . . . . 
-        . . . . . . b b . . . . . . 
-        . . . . . f b b f . . . . . 
-        . . . . . f f f f . . . . . 
-        . . . . f 4 f f 4 f . . . . 
-        . . . . f e e e e f . . . . 
-        . . . . f e e e e f . . . . 
-        . . . . f d e e d f . . . . 
-        e e e e e e e e e e e e e e 
-        . . . . f d e e d f . . . . 
-        . . . . f e e e e f . . . . 
-        . . . . f d e e d f . . . . 
-        . . . . f f f f f f . . . . 
-        `, SpriteKind.Rowboat)
-    RowBoat.setPosition(130, 65)
-    RowBoat.z = 6
-    EnemyCount += 1
-    RowBoat = sprites.create(img`
-        . . . . . . b b . . . . . . 
-        . . . . . . b b . . . . . . 
-        . . . . . f b b f . . . . . 
-        . . . . . f f f f . . . . . 
-        . . . . f 4 f f 4 f . . . . 
-        . . . . f e e e e f . . . . 
-        . . . . f e e e e f . . . . 
-        . . . . f d e e d f . . . . 
-        e e e e e e e e e e e e e e 
-        . . . . f d e e d f . . . . 
-        . . . . f e e e e f . . . . 
-        . . . . f d e e d f . . . . 
-        . . . . f f f f f f . . . . 
-        `, SpriteKind.Rowboat)
-    RowBoat.setPosition(100, 100)
-    RowBoat.z = 6
-    EnemyCount += 1
-    RowBoat = sprites.create(img`
-        . . . . . . b b . . . . . . 
-        . . . . . . b b . . . . . . 
-        . . . . . f b b f . . . . . 
-        . . . . . f f f f . . . . . 
-        . . . . f 4 f f 4 f . . . . 
-        . . . . f e e e e f . . . . 
-        . . . . f e e e e f . . . . 
-        . . . . f d e e d f . . . . 
-        e e e e e e e e e e e e e e 
-        . . . . f d e e d f . . . . 
-        . . . . f e e e e f . . . . 
-        . . . . f d e e d f . . . . 
-        . . . . f f f f f f . . . . 
-        `, SpriteKind.Rowboat)
-    RowBoat.setPosition(130, 130)
-    RowBoat.z = 6
-    EnemyCount += 1
+    if (Boss_Stage == 0 || BossCannon_count == 3) {
+        RowBoat = sprites.create(img`
+            . . . . . . b b . . . . . . 
+            . . . . . . b b . . . . . . 
+            . . . . . f b b f . . . . . 
+            . . . . . f f f f . . . . . 
+            . . . . f 4 f f 4 f . . . . 
+            . . . . f e e e e f . . . . 
+            . . . . f e e e e f . . . . 
+            . . . . f d e e d f . . . . 
+            e e e e e e e e e e e e e e 
+            . . . . f d e e d f . . . . 
+            . . . . f e e e e f . . . . 
+            . . . . f d e e d f . . . . 
+            . . . . f f f f f f . . . . 
+            `, SpriteKind.Rowboat)
+        RowBoat.setPosition(130, 30)
+        RowBoat.z = 6
+        EnemyCount += 1
+        RowBoat = sprites.create(img`
+            . . . . . . b b . . . . . . 
+            . . . . . . b b . . . . . . 
+            . . . . . f b b f . . . . . 
+            . . . . . f f f f . . . . . 
+            . . . . f 4 f f 4 f . . . . 
+            . . . . f e e e e f . . . . 
+            . . . . f e e e e f . . . . 
+            . . . . f d e e d f . . . . 
+            e e e e e e e e e e e e e e 
+            . . . . f d e e d f . . . . 
+            . . . . f e e e e f . . . . 
+            . . . . f d e e d f . . . . 
+            . . . . f f f f f f . . . . 
+            `, SpriteKind.Rowboat)
+        RowBoat.setPosition(130, 65)
+        RowBoat.z = 6
+        EnemyCount += 1
+        RowBoat = sprites.create(img`
+            . . . . . . b b . . . . . . 
+            . . . . . . b b . . . . . . 
+            . . . . . f b b f . . . . . 
+            . . . . . f f f f . . . . . 
+            . . . . f 4 f f 4 f . . . . 
+            . . . . f e e e e f . . . . 
+            . . . . f e e e e f . . . . 
+            . . . . f d e e d f . . . . 
+            e e e e e e e e e e e e e e 
+            . . . . f d e e d f . . . . 
+            . . . . f e e e e f . . . . 
+            . . . . f d e e d f . . . . 
+            . . . . f f f f f f . . . . 
+            `, SpriteKind.Rowboat)
+        RowBoat.setPosition(130, 100)
+        RowBoat.z = 6
+        EnemyCount += 1
+    } else if (Boss_Stage == 3 && BossCannon_count == 2) {
+        CaravalShip = sprites.create(img`
+            ..............f8..............
+            ........bb....f1..bb..........
+            ..eeeeeebbeeeef8eebbeee.......
+            .ee44444bb4444f144bb44ee......
+            .e4eeee4ff4eeef8e4ff4e4ee.....
+            .e4eeeeffffeeef1effff4e4ee....
+            .e4eeeeeeeeeeef8eeeee44e4ee...
+            .e4eeeeeeeeeeef1eeeee4e4e4ee..
+            .e4e4e4eeeeeeffffeeee44e4e4ee.
+            .e4ee4eeeeeeefeefeeee4e4e4e4e.
+            .e4e4e4eeeeeeffffeeee44e4e4ee.
+            .e4eeeeeeeeeeef1eeeee4e4e4ee..
+            .e4eeeeeeeeeeef8eeeee44e4ee...
+            .e4eeeeffffeeef1effff4e4ee....
+            .e4eeee4ff4eeef8e4ff4e4ee.....
+            .ee44444bb4444f144bb44ee......
+            ..eeeeeebbeeeef8eebbeee.......
+            ........bb....f1..bb..........
+            ..............f8..............
+            `, SpriteKind.Caraval)
+        CaravalShip.setPosition(100, 130)
+        CaravalShip.z = 6
+        sprites.setDataNumber(CaravalShip, "Life", 3)
+        EnemyCount += 1
+        CaravalShip = sprites.create(img`
+            ..............f8..............
+            ........bb....f1..bb..........
+            ..eeeeeebbeeeef8eebbeee.......
+            .ee44444bb4444f144bb44ee......
+            .e4eeee4ff4eeef8e4ff4e4ee.....
+            .e4eeeeffffeeef1effff4e4ee....
+            .e4eeeeeeeeeeef8eeeee44e4ee...
+            .e4eeeeeeeeeeef1eeeee4e4e4ee..
+            .e4e4e4eeeeeeffffeeee44e4e4ee.
+            .e4ee4eeeeeeefeefeeee4e4e4e4e.
+            .e4e4e4eeeeeeffffeeee44e4e4ee.
+            .e4eeeeeeeeeeef1eeeee4e4e4ee..
+            .e4eeeeeeeeeeef8eeeee44e4ee...
+            .e4eeeeffffeeef1effff4e4ee....
+            .e4eeee4ff4eeef8e4ff4e4ee.....
+            .ee44444bb4444f144bb44ee......
+            ..eeeeeebbeeeef8eebbeee.......
+            ........bb....f1..bb..........
+            ..............f8..............
+            `, SpriteKind.Caraval)
+        CaravalShip.setPosition(100, 20)
+        CaravalShip.z = 6
+        sprites.setDataNumber(CaravalShip, "Life", 3)
+        EnemyCount += 1
+    } else if (Boss_Stage == 3 && BossCannon_count == 1) {
+        IronSides = sprites.create(img`
+            ..............f8..................
+            1..1..1..1..1.f1..1..1............
+            ..ccccccccccccf8cccccccc1.........
+            .ccffffffffffff1ffffffccc.........
+            .cfbbbbbbbbbbbf8bbbbbbfccc..bb....
+            .cfbabbbbbbbbbf1bbbaabbfcccbbb....
+            .cfffbbbbbbbbbf8bbaababffbbbb.....
+            bbbfbbbbbbbbbbf1bbabaabaffbbc.....
+            bbbfbbbbbbbbbbf8bbbaabbbfffbcc1...
+            .cfffbbbbbbbbbf1bbbbbbbbbfffccc...
+            .cfbabbbbbbbbffffbbbbbbbbbaffccc..
+            .cfbbbbbbbbbbfccfbbbbbbbbbbbbffcc1
+            .cfbbbbbbbbbbfccfbbbbbbbbbbbbffcc1
+            .cfbabbbbbbbbffffbbbbbbbbbaffccc..
+            .cfffbbbbbbbbbf1bbbbbbbbbfffccc...
+            bbbfbbbbbbbbbbf8bbbbbbbbfffbcc1...
+            bbbfbbbbbbbbbbf1bbbbbbbaffbbc.....
+            .cfffbbbbbbbbbf8bbbbbbbffbbbb.....
+            .cfbabbbbbbbbbf1bbbbbbbfcccbbb....
+            .cfbbbbbbbbbbbf8bbbbbbfccc..bb....
+            .ccffffffffffff1ffffffccc.........
+            ..ccccccccccccf8cccccccc1.........
+            1..1..1..1..1.f1..1..1............
+            ..............f8..................
+            `, SpriteKind.IronSides)
+        IronSides.setPosition(130, 100)
+        IronSides.z = 6
+        sprites.setDataNumber(IronSides, "Life", 5)
+        EnemyCount += 1
+        IronSides = sprites.create(img`
+            ..............f8..................
+            1..1..1..1..1.f1..1..1............
+            ..ccccccccccccf8cccccccc1.........
+            .ccffffffffffff1ffffffccc.........
+            .cfbbbbbbbbbbbf8bbbbbbfccc..bb....
+            .cfbabbbbbbbbbf1bbbaabbfcccbbb....
+            .cfffbbbbbbbbbf8bbaababffbbbb.....
+            bbbfbbbbbbbbbbf1bbabaabaffbbc.....
+            bbbfbbbbbbbbbbf8bbbaabbbfffbcc1...
+            .cfffbbbbbbbbbf1bbbbbbbbbfffccc...
+            .cfbabbbbbbbbffffbbbbbbbbbaffccc..
+            .cfbbbbbbbbbbfccfbbbbbbbbbbbbffcc1
+            .cfbbbbbbbbbbfccfbbbbbbbbbbbbffcc1
+            .cfbabbbbbbbbffffbbbbbbbbbaffccc..
+            .cfffbbbbbbbbbf1bbbbbbbbbfffccc...
+            bbbfbbbbbbbbbbf8bbbbbbbbfffbcc1...
+            bbbfbbbbbbbbbbf1bbbbbbbaffbbc.....
+            .cfffbbbbbbbbbf8bbbbbbbffbbbb.....
+            .cfbabbbbbbbbbf1bbbbbbbfcccbbb....
+            .cfbbbbbbbbbbbf8bbbbbbfccc..bb....
+            .ccffffffffffff1ffffffccc.........
+            ..ccccccccccccf8cccccccc1.........
+            1..1..1..1..1.f1..1..1............
+            ..............f8..................
+            `, SpriteKind.IronSides)
+        IronSides.setPosition(130, 30)
+        IronSides.z = 6
+        sprites.setDataNumber(IronSides, "Life", 5)
+    } else if (Boss_Stage == 3 && BossCannon_count == 0) {
+        game.over(true)
+    } else {
+    	
+    }
 }
 function NumberFun () {
     Numbers_array = [
@@ -2718,6 +2838,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.East_Boss_Cannon, function (
     )
     sprites.changeDataNumberBy(otherSprite, "Life", -1)
     if (sprites.readDataNumber(otherSprite, "Life") == 0) {
+        BossCannon_count += -1
         otherSprite.destroy(effects.fire, 500)
         Boss_Rowboats()
     }
@@ -3084,7 +3205,11 @@ sprites.onDestroyed(SpriteKind.IronSides, function (sprite) {
 function Player_Death () {
     if (Adventure == true) {
         Ship.destroy(effects.ashes, 500)
-        Ship_Integrity = 5
+        if (Level == 5) {
+            Ship_Integrity = Ship_Max_Integrity
+        } else {
+            Ship_Integrity = Ship_Max_Integrity / 2
+        }
         Shop()
     } else if (Survival == true) {
         game.over(false)
@@ -4051,8 +4176,15 @@ function rowBoat () {
     }
 }
 function Boss_Script2 () {
-    if (EnemyCount == 0 && Boss_Stage == 0) {
+    if (EnemyCount == 0 && Boss_Stage == -1) {
+        TIMER = game.runtime()
+        Boss_Stage = 0
+    } else if (game.runtime() > TIMER + 5000 && (EnemyCount == 0 && Boss_Stage == 0)) {
+        Boss_Rowboats()
         Boss_Stage = 1
+    }
+    if (EnemyCount == 0 && Boss_Stage == -1) {
+    	
     } else if (EnemyCount == 0 && Boss_Stage == 1) {
         Dreadship_East = sprites.create(img`
             ....................facfbbbbbbbb
@@ -4270,7 +4402,7 @@ function Boss_Script2 () {
             ................f....fff.
             ......................f..
             `, SpriteKind.East_Boss_Cannon)
-        sprites.setDataNumber(Boss_Cannon_East1, "Life", 10)
+        sprites.setDataNumber(Boss_Cannon_East1, "Life", 14)
         Boss_Cannon_East1.z = 11
         Boss_Cannon_East2 = sprites.create(img`
             ......................f..
@@ -4291,7 +4423,7 @@ function Boss_Script2 () {
             ................f....fff.
             ......................f..
             `, SpriteKind.East_Boss_Cannon)
-        sprites.setDataNumber(Boss_Cannon_East2, "Life", 10)
+        sprites.setDataNumber(Boss_Cannon_East2, "Life", 14)
         Boss_Cannon_East2.z = 11
         Boss_Cannon_East3 = sprites.create(img`
             ......................f..
@@ -4312,7 +4444,7 @@ function Boss_Script2 () {
             ................f....fff.
             ......................f..
             `, SpriteKind.East_Boss_Cannon)
-        sprites.setDataNumber(Boss_Cannon_East3, "Life", 10)
+        sprites.setDataNumber(Boss_Cannon_East3, "Life", 14)
         Boss_Cannon_East3.z = 11
         Boss_Cannon_East4 = sprites.create(img`
             ......................f..
@@ -4333,7 +4465,7 @@ function Boss_Script2 () {
             ................f....fff.
             ......................f..
             `, SpriteKind.East_Boss_Cannon)
-        sprites.setDataNumber(Boss_Cannon_East4, "Life", 10)
+        sprites.setDataNumber(Boss_Cannon_East4, "Life", 14)
         Boss_Cannon_East4.z = 11
         Dreadship_Wake = sprites.create(img`
             ...............1..1.............
@@ -4547,12 +4679,22 @@ function Boss_Script2 () {
         4000,
         true
         )
-        EnemyCount += 4
         Boss_Stage = 3
+        BossCannon_count = 4
     } else {
     	
     }
 }
+sprites.onOverlap(SpriteKind.Boss_Cannonball, SpriteKind.Player, function (sprite, otherSprite) {
+    Ship_Integrity += -2
+    HUDdigits()
+    sprite.destroy(effects.fire, 200)
+    otherSprite.x += -15
+    if (Ship_Integrity <= 0) {
+        otherSprite.destroy()
+        Player_Death()
+    }
+})
 function StartGame () {
     HUDdigits()
     level5()
@@ -4909,7 +5051,6 @@ let Chest: Sprite = null
 let Survival = false
 let Adventure = false
 let TreasureCaraval: Sprite = null
-let CaravalShip: Sprite = null
 let Update_Shop_1 = false
 let Update_Shop_2 = false
 let Update_Shop_3 = false
@@ -4921,15 +5062,15 @@ let Rand_x = 0
 let Gull: Sprite = null
 let Doubloon_HUD: Sprite = null
 let Integrity_HUD: Sprite = null
-let IronSides: Sprite = null
 let Ship_Dock: Sprite = null
-let Boss_Stage = 0
 let Dubloon_Third_Digit: Sprite = null
 let Dubloon_Second_Digit: Sprite = null
 let Dubloon_First_Digit: Sprite = null
 let Integrity_Second_Digit: Sprite = null
 let Integrity_First_Digit: Sprite = null
 let Numbers_array: Image[] = []
+let IronSides: Sprite = null
+let CaravalShip: Sprite = null
 let RowBoat: Sprite = null
 let reflag: Sprite = null
 let ReloadCannon = 0
@@ -4938,9 +5079,11 @@ let Level_Bonus = 0
 let DockingTimer = 0
 let Net2: Sprite = null
 let NetReload = 0
-let EnemyCount = 0
 let Sunken_Treasure: Sprite = null
 let Ship: Sprite = null
+let BossCannon_count = 0
+let Boss_Stage = 0
+let EnemyCount = 0
 let Stern_Cannon: Sprite = null
 let Starboard_Bow_Cannon: Sprite = null
 let Port_Bow_Cannon: Sprite = null
@@ -4970,15 +5113,15 @@ North = 0
 East = 1
 South = 2
 West = 3
-Ship_Max_Integrity = 10
-Ship_Integrity = 10
-Cannon_Upgrade = false
+Ship_Max_Integrity = 20
+Ship_Integrity = 20
+Cannon_Upgrade = true
 Doubloons = 20
-Owns_Port_Cannon = false
-Owns_Starboard_Cannon = false
-Owns_Port_Bow_Cannon = false
-Owns_Starboard_Bow_Cannon = false
-Owns_Stern_Cannon = false
+Owns_Port_Cannon = true
+Owns_Starboard_Cannon = true
+Owns_Port_Bow_Cannon = true
+Owns_Starboard_Bow_Cannon = true
+Owns_Stern_Cannon = true
 game.setDialogCursor(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
@@ -5790,6 +5933,13 @@ game.onUpdateInterval(1500, function () {
 })
 game.onUpdateInterval(1500, function () {
     if (!(blockMenu.isMenuOpen())) {
+        if (BossCannon_count == 1 && Math.percentChance(100)) {
+            Gusts()
+        } else if (BossCannon_count == 2 && Math.percentChance(50)) {
+            Gusts()
+        } else if (BossCannon_count == 3 && Math.percentChance(20)) {
+            Gusts()
+        }
         if (Level >= 1 && Math.percentChance(20)) {
             Gusts()
         }
