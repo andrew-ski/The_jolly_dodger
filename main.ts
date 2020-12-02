@@ -2169,9 +2169,33 @@ function Boss_Rowboats () {
         IronSides.z = 6
         sprites.setDataNumber(IronSides, "Life", 5)
     } else if (Boss_Stage == 3 && BossCannon_count == 0) {
+        Names = [
+        "Dreadful",
+        "Seadog",
+        "Black Jack",
+        "Blackbeard",
+        "Silver-Tongue",
+        "Calico Jack",
+        "Kidd",
+        "Hook",
+        "Nemo",
+        "Barbossa",
+        "Bones"
+        ]
+        if (Ships_Destroyed == 0) {
+            Ranking = " The Immortal!"
+        } else if (Ships_Destroyed < 3) {
+            Ranking = " The Blackheart!"
+        } else if (Ships_Destroyed < 5) {
+            Ranking = " The Madman!"
+        } else if (Ships_Destroyed < 10) {
+            Ranking = " The salty..."
+        } else {
+            Ranking = " The swabbie..."
+        }
+        game.showLongText("Captain, You have destroyed the entire navy and struck fear into the landlubber's hearts! " + "We only had to rebuild the Jolly Dodger " + Ships_Destroyed + " times!", DialogLayout.Full)
+        game.showLongText("You've earned a new reputation!" + " Captain " + Names[randint(0, 10)] + Ranking, DialogLayout.Full)
         game.over(true)
-    } else {
-    	
     }
 }
 function NumberFun () {
@@ -3207,6 +3231,7 @@ sprites.onDestroyed(SpriteKind.IronSides, function (sprite) {
 function Player_Death () {
     if (Adventure == true) {
         Ship.destroy(effects.ashes, 500)
+        Ships_Destroyed += 1
         if (Level == 5) {
             Ship_Integrity = Ship_Max_Integrity
         } else {
@@ -4771,9 +4796,6 @@ sprites.onDestroyed(SpriteKind.Caraval, function (sprite) {
         ReFlag()
     }
 })
-function Shanty () {
-	
-}
 function Fire_Cannons () {
     if (Owns_Port_Cannon == true) {
         if (ShipDirection == North) {
@@ -5013,6 +5035,7 @@ blockMenu.onMenuOptionSelected(function (option, index) {
             "Bow Port Cannon 10¤",
             "Bow Starboard Cannon 10¤",
             "Rear Cannon 10¤",
+            "No Sea Shanties!",
             "Set Sail"
             ]
         } else if (blockMenu.selectedMenuOption() == "Scurvy Dog (Survival)") {
@@ -5026,6 +5049,7 @@ blockMenu.onMenuOptionSelected(function (option, index) {
             "Bow Port Cannon 10¤",
             "Bow Starboard Cannon 10¤",
             "Rear Cannon 10¤",
+            "No Sea Shanties!",
             "Set Sail"
             ]
         } else if (blockMenu.selectedMenuOption() == "+ Cannon Damage 25¤" && Doubloons >= 25) {
@@ -5044,12 +5068,15 @@ blockMenu.onMenuOptionSelected(function (option, index) {
             if (Ship_Speed == 65) {
                 Shop_1.removeAt(index)
             }
-        } else if (blockMenu.selectedMenuOption() == "Toggle Sea Shanties") {
+        } else if (blockMenu.selectedMenuOption() == "No Sea Shanties!") {
             if (Shanties == true) {
+                game.showLongText("Captain, Your order for silence has been received, but nobody can make these salty sea dogs stop in the middle of a shanty...", DialogLayout.Full)
                 Shanties = false
-            } else {
-                Shanties = true
+                Shop_1[index] = "More Sea Shanties!"
             }
+        } else if (blockMenu.selectedMenuOption() == "More Sea Shanties!") {
+            Shanties = true
+            Shop_1[index] = "No Sea Shanties!"
         }
         Shop()
     } else {
@@ -5101,6 +5128,8 @@ let Dubloon_First_Digit: Sprite = null
 let Integrity_Second_Digit: Sprite = null
 let Integrity_First_Digit: Sprite = null
 let Numbers_array: Image[] = []
+let Ranking = ""
+let Names: string[] = []
 let IronSides: Sprite = null
 let CaravalShip: Sprite = null
 let RowBoat: Sprite = null
@@ -5139,7 +5168,8 @@ let North = 0
 let Level = 0
 let Ship_Speed = 0
 let Reload_Time = 0
-Shanty()
+let Ships_Destroyed = 0
+Ships_Destroyed = 0
 Reload_Time = 1000
 Ship_Speed = 50
 Level = 0
@@ -5194,7 +5224,7 @@ game.setDialogFrame(img`
     e e e e e e e e e e e e e e e 
     `)
 game.setDialogTextColor(4)
-game.showLongText("Outfit your ship, sail into the heart of the enemy and take their treasure!", DialogLayout.Full)
+game.showLongText("Captain, You've recruited a crew of swarthy vermin! Now outfit your ship and sail into enemy territory to plunder some booty and steal all the glory!", DialogLayout.Full)
 game.showLongText("Find sunken treasure and throw your net (B) to pull it in. Can't find any sunken treasure? Sink some with your cannons (A).", DialogLayout.Full)
 Shop()
 game.onUpdate(function () {
