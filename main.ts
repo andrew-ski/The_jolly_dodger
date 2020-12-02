@@ -1829,7 +1829,6 @@ function level1 () {
     SunkenTreasure()
     Dock2()
     CannonTower2()
-    Caraval2()
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Dock, function (sprite, otherSprite) {
     if (EnemyCount == 0) {
@@ -5045,6 +5044,12 @@ blockMenu.onMenuOptionSelected(function (option, index) {
             if (Ship_Speed == 65) {
                 Shop_1.removeAt(index)
             }
+        } else if (blockMenu.selectedMenuOption() == "Toggle Sea Shanties") {
+            if (Shanties == true) {
+                Shanties = false
+            } else {
+                Shanties = true
+            }
         }
         Shop()
     } else {
@@ -5122,8 +5127,9 @@ let Owns_Starboard_Bow_Cannon = false
 let Owns_Port_Bow_Cannon = false
 let Owns_Starboard_Cannon = false
 let Owns_Port_Cannon = false
-let Doubloons = 0
 let Cannon_Upgrade = false
+let Shanties = false
+let Doubloons = 0
 let Ship_Integrity = 0
 let Ship_Max_Integrity = 0
 let West = 0
@@ -5133,6 +5139,7 @@ let North = 0
 let Level = 0
 let Ship_Speed = 0
 let Reload_Time = 0
+Shanty()
 Reload_Time = 1000
 Ship_Speed = 50
 Level = 0
@@ -5142,8 +5149,10 @@ South = 2
 West = 3
 Ship_Max_Integrity = 10
 Ship_Integrity = 10
-Cannon_Upgrade = false
 Doubloons = 20
+Shanties = true
+music.setVolume(38)
+Cannon_Upgrade = false
 Owns_Port_Cannon = false
 Owns_Starboard_Cannon = false
 Owns_Port_Bow_Cannon = false
@@ -6061,5 +6070,37 @@ game.onUpdateInterval(1500, function () {
             Caraval_Projectile.setPosition(value.x + -6, value.y)
             Caraval_Projectile.setKind(SpriteKind.EnemyProjectile)
         }
+    }
+})
+forever(function () {
+    if (Shanties == true) {
+        music.playMelody(music.convertRTTTLToMelody("HIGHBRB1:d=4,o=5,b=0:8d,d,8g,g,8a,a#.,c6,8a#,a.,a#,8a,d.,p,8d,2d,8d,2d6,8d,g,8a,a#,8c6,2d6,8a#,d6,8d6,a#,8d6,c6,8c6,a,8c6,a#,8a#,a,8g,d.,a#4,8c,d,8g,a#,8a,g.,g,8f,d.,g,8f#,2g"), 200)
+        music.rest(music.beat(BeatFraction.Breve))
+        music.rest(music.beat(BeatFraction.Breve))
+    }
+    if (Shanties == true) {
+        music.playMelody(music.convertRTTTLToMelody("drunken_sa:d=4,o=5,b=120:f4,8a,8a,a,8a,8a,8p,8p,f4,d,f,a,p,p,e4,8g,8g,g,8g,8g,8p,8p,e4,c,e,g,p,p,f4,8a,8a,a,8a,8a,8p,8p,f4,b,c6,d6,p,p,e4,a,g,e,p,p,2f4,2p,2p,2f4,2p,2p,2f4,a.,8a,8p,8p,f4,d,f,a,p,p,2e4,g.,8g,8p,8p,e4,c,e,g,p,p,2f4,a.,8a,8p,8p,f4,b,c6,d6,p,p,e4,a,p,p,e4,e,p,p,2f4,2p,2p,2f4"), 220)
+        music.rest(music.beat(BeatFraction.Breve))
+        music.rest(music.beat(BeatFraction.Breve))
+    }
+    if (Shanties == true) {
+        music.playMelody(music.convertRTTTLToMelody("MAUI1:d=4,o=5,b=0:c,c,f,f,e,8c,8c,g#,g#,g,8c6,8a#,g#,f,8g,8f,d#,2f.,8c,8c,f,8f,8f,e,8c,8c,g#,g#,g,8c6,8a#,g#,f,g,d#,2f.,8g#,8a#,c6,c6,c6,8a#,8g#,a#,a#,a#,8g,8g,g#,g#,g,f,2g,c6,8c,8c,f,8f,8f,e,8c,8c,g#,g#,g,8c6,8a#,g#,f,g,g,2f.,8g#,8a#,c.6,8c6,c6,g#,a#.,8a#,a#,8c6,8a#,g#,g#,g#,f,2g,c6,c,f,f,e,8c,8c,g#,g#,g,8c6,8a#,g#,f,8g,8f,d#,2f."), 200)
+        music.rest(music.beat(BeatFraction.Breve))
+        music.rest(music.beat(BeatFraction.Breve))
+    }
+    if (Shanties == true) {
+        music.playMelody(music.convertRTTTLToMelody("pirates:d=4,o=5,b=0:2p,8a4,8b4,8p,8p,e4,p,p,e4,8b4,8a4,8p,e4,e4,8b4,8c,8p,e4,p,e4,8c,8b4,8p,8p,e4,p,e4,8a4,8b4,8p,8p,e4,p,p,e4,8b4,8a4,8p,e4,e4,8b4,8c,8p,e4,p,8e4,8d,8c,8b4,8p,8p,e4,p,e4,8c,8d,8p,8p,g4,p,p,g4,8d,8c,8p,8p,d4,p,d4,8d,8e,8p,8p,a4,p,p,a4,8e,8d,8p,8p,e4,p,e4,8c,8d,8p,8p,e4,p,p,e4,8d,8c,8p,8p,d4,p,p,d4,8c,8b4,8p,8p,e4,8a3,8e4,8a3,8e4,a3,8a3,8e4,8a3,8e4,a3,8a3,8e4,8a3,8e4,a3,8a3,8e4,8a3,8e4,8p,8p,a3,8a3,8e4,8a3,8e4,8p,8p,a3,8a3,8e4,8a3,8e4,8p,8p,g3,p,8g3,8d4,8p,8g3,8d4,8p,a3,8a3,8e4,8a3,8e4,8p,8p,a3,8a3,8e4,8a3,8e4,8p,8p,a3,8a3,8e4,8a3,8e4,8p,8p,g3,p,p,8g3,8d4,8p,8p,8g3,8d4,8p,8p,a3,8a3,8e4,8a3,8e4,8p,8p,a3,8a3,8e4,8a3,8e4,8p,8p,a3,8a3,8e4,8a3,8e4,8p,8p,g3,p,8g3,8d4,8p,8g3,8d4,8p,a3,8a3,8e4,8a3,8e4,8p,8p,g3,p,p,8g3,8d4,8p,8g3,8d4,8p,8p,g3,p,p,8g3,8d4,8p,8g3,8d4,8p,8p,g3,p,p,8g3,8d4,8p,8g3,8d4,8g3,8d4,8g3,8d4,8p,8g3,8p,8d4,8p,8p,e4,p,p,e4,8b6,8a6,8p,8p,b4,p,b4,8b6,8c7,8p,8p,b4,p,p,b4,8c7,8b6,8p,8p,e4,p,e4,8a6,8b6,8p,8p,e4,p,p,e4,8b6,8a6,8p,8p,b4,p,b4,8b6,8c7,8p,8p,b4,p,p,8b4,8d7,8c7,8b6,8p,8p,e4,p,e4,8c7,8d7,8p,8p,g4,p,p,g4,8d7,8c7,8p,8p,d4,p,d4,8d7,8e7,8p,8p,a4,p,p,a4,8e7,8d7,8p,8p,e4,p,e4,8c7,8d7,8p,8p,e4,p,p,e4,8d7,8c7,8p,8p,d4,p,p,d4,8c7,8b6,8p,8p,e4,8a3,8e4,8a3,8e4,a3,8a3,8e4,8a3,8e4,8p,a3,p,8a3,8p,8e4,8p,8a3,8p,8e4,8p,a3,p,8a3,8p,8e4,8p,8a3,8p,8e4,8p,8p,8p,16e4"), 200)
+        music.rest(music.beat(BeatFraction.Breve))
+        music.rest(music.beat(BeatFraction.Breve))
+    }
+    if (Shanties == true) {
+        music.playMelody(music.convertRTTTLToMelody("pirate_pol:d=4,o=5,b=120:1p,8c.,54d,34p.,16d#,16p,16f,16p,16g,16p,16g#,16p,16a#,16p,16b,16p,8c.6,54d6,34p.,16d#6,16p,16c6,16p,16a#,16p,16g,16p,8a#,85d#,34p,256g,26p,256a#,26p,256c6,8p.,54d6,34p.,16d#6,16p,16c6,16p,16a#,16p,16g,16p,8a#,85d#,34p,256g,26p,256a#,26p,256c6,8p.,54d6,34p.,16d#6,16p,16f6,16p,16g6,16p,16d#6,16p,g6,16f6,16p,16d6,16p,8f6,85a#,34p,256c6,26p,256d6,26p,16d#6,16p,16c6,16p,d#6,d6,16a#,16p,16a#,24p,47b,1p,24d#,256g,26p,256a#,26p,256c6,8p.,16d6,16d#6,16p,16d6,16p,16c6,16p,16g#,16p,c6,16d6,16p,16a#,16p,8d6,85d#6,34p,256f6,26p,256g6,26p,256g#6,p,41g6,p,41f6,1p.,24d#,256g,26p,256a#,26p,256c6,8p,16b,16p,16a#,16p,16a,16p,16a#,16p,16b,16p,16c6,16p,16c#6,16p,16d6,1p,8d.6,54e6,34p.,16f6,16p,16d6,16p,16c6,16p,16a,16p,8c6,85f,34p,256a,26p,256c6,26p,256d6,8p.,54e6,34p.,16f6,16p,16d6,16p,16c6,16p,16a,16p,8c6,85f,34p,256a,26p,256c6,26p,256d6,8p.,54e6,34p.,16f6,16p,16g6,16p,16a6,16p,16f6,16p,a6,16g6,16p,16e6,16p,8g6,85c6,34p,256d6,26p,256e6,26p,16f6,16p,16d6,16p,f6,e6,16c6,16p,16c6,16p,16d6,1p,16d6,171a,18p,171f,18p,16c,16p,16c,16p,16d,2p,16a6,8p.,16f6,8p.,16a6,16p,16f6,16p,16d6,1p,16a6,8p.,16f6,8p.,16a6,16p,16f6,16p,16d6,1p,16a#6,8p.,16g6,8p.,16a#6,16p,16g6,16p,16d6,1p,16a#6,8p.,16g6,8p.,16a#6,16p,16g6,16p,16d6,1p,16a6,8p.,16d7,8p.,16a6,16p,24g6,256a6,26p,256g6,26p,256f6,p,16a6,16p,16c7,171a6,18p,171g6,28p,256a6,26p,256g6,26p,256e6,8p,16d6,16p,16c6,16p,16d6,8p.,16a#,16p,16a,16p,16a#,8p.,16a,16p,16g,16p,16a,8p.,16g#,16p,16f,16p,16g#,16p,16f#,171f,18p,16d#,1p,16d#,16p,16d#,171f,18p,171f#,18p,171f,18p,171d#,8p,16c#,16p,16c#,171d#,18p,171f,18p,171d#,18p,171c#,1p,16f#,16p,16f#,171g#,18p,171a#,18p,171g#,18p,171f#,8p,16f,16p,16f,171f#,18p,171g#,18p,171f#,18p,171f,1p,16a#,171g#,18p,171f#,8p,16g#,16p,16f,16p,16f#,171f,18p,171d#,8p,16f,16p,16c#,16p,16d#,171c#,18p,171d#,18p,171f#,18p,16d#,16p,16c#,16p,2a#4,16f#,8p.,16g#,8p.,16a#,8p.,16c#6,8p.,16d#6,1p,16d#,16p,16d#,171f,18p,171f#,18p,171f,18p,171d#,8p,16c#,16p,16c#,171d#,18p,171f,18p,171d#,18p,171c#,1p,16f#,16p,16f#,171g#,18p,171a#,18p,171g#,18p,171f#,8p,16f,16p,16f,171f#,18p,171g#,18p,171f#,18p,171f,1p,16a#,171g#,18p,171f#,8p,16g#,16p,16f,16p,16f#,171f,18p,171d#,8p,16f,16p,16c#,16p,16d#,171c#,18p,171d#,18p,171f#,18p,16d#,16p,16c#,16p,2a#4,16f#,8p.,16g#,8p.,16a#,8p.,16c#6,8p.,8d#.6,54f6,34p.,16f#6,16p,16d#6,16p,16c#6,16p,16a#,16p,8c#6,85f#,34p,256a#,26p,256c#6,26p,256d#6,8p.,54f6,34p.,16f#6,16p,16d#6,16p,16c#6,16p,16a#,16p,8c#6,85f#,34p,256a#,26p,256c#6,26p,256d#6,8p.,54f6,34p.,16f#6,16p,16g#6,16p,16a#6,16p,16f#6,16p,a#6,16g#6,16p,16f6,16p,8g#6,85c#6,34p,256d#6,26p,256f6,26p,16f#6,16p,16d#6,16p,f#6,f6,16c#6,16p,16c#6,24p,47d6,1p,24f#,256a#,26p,256c#6,26p,256d#6,8p.,16f6,16f#6,16p,16f6,16p,16d#6,16p,16b,16p,d#6,16f6,16p,16c#6,16p,8f6,85f#6,34p,256g#6,26p,256a#6,26p,256b6,p,41a#6,p,41g#6,1p.,24f#,256a#,26p,256c#6,26p,256d#6,1p,16d#6,8p,16d6,16c#6,16p,16b,16p,16a#,16p,16g#,16p,16f#,16p,16f,16p,16d#,1p,16f#,8p.,16d#"), 120)
+        music.rest(music.beat(BeatFraction.Breve))
+        music.rest(music.beat(BeatFraction.Breve))
+    }
+    if (Shanties == true) {
+        music.playMelody(music.convertRTTTLToMelody("SPANLAD1:d=4,o=5,b=0:2p,d,g,g,f#,2g,8g,8a,a#,a,g,f#,d.,8d,g,g,f#,2g,8g,8a,a#,a,g,2a,8a,8a,a#,a,g,c6,a#,a,d6,g,8g,8a,8f#,8e,d,8d6,8c6,a#,a,g,f#,d,d,d,g,f#,2g"), 200)
+        music.rest(music.beat(BeatFraction.Breve))
+        music.rest(music.beat(BeatFraction.Breve))
     }
 })

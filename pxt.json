@@ -7,7 +7,8 @@
         "animation": "*",
         "block-menu": "github:riknoll/arcade-custom-menu#v0.0.1",
         "arcade-sprite-data": "github:microsoft/arcade-sprite-data#v0.1.0",
-        "darts": "*"
+        "darts": "*",
+        "pxt-rtttl": "github:pelikhan/pxt-rtttl#v0.0.10"
     },
     "files": [
         "main.blocks",
