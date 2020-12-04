@@ -338,7 +338,7 @@ sprites.onOverlap(SpriteKind.Caraval, SpriteKind.Projectile, function (sprite, o
     if (sprites.readDataNumber(sprite, "Life") == 1) {
         sprite.destroy(effects.ashes, 500)
     } else {
-        sprite.startEffect(effects.fire)
+        sprite.startEffect(effects.warmRadial)
         sprites.changeDataNumberBy(sprite, "Life", -1)
     }
     otherSprite.destroy()
@@ -1950,26 +1950,28 @@ function Level2 () {
     Caraval2()
 }
 sprites.onDestroyed(SpriteKind.Rowboat, function (sprite) {
-    Treasure_Rowboat = sprites.create(img`
-        . . . . . . 
-        . . 6 6 . . 
-        . 6 6 6 6 . 
-        . 6 6 6 6 . 
-        6 6 6 6 6 6 
-        6 6 6 6 6 6 
-        6 6 6 6 6 6 
-        6 6 6 6 6 6 
-        6 6 6 6 6 6 
-        6 6 6 6 6 6 
-        6 6 6 6 6 6 
-        . 6 6 6 6 . 
-        . . 6 6 . . 
-        `, SpriteKind.Treasure)
-    Treasure_Rowboat.setPosition(sprite.x, sprite.y)
-    Treasure_Rowboat.z = 0
-    EnemyCount += -1
-    if (EnemyCount == 0) {
-        ReFlag()
+    if (!(blockMenu.isMenuOpen())) {
+        Treasure_Rowboat = sprites.create(img`
+            . . . . . . 
+            . . 6 6 . . 
+            . 6 6 6 6 . 
+            . 6 6 6 6 . 
+            6 6 6 6 6 6 
+            6 6 6 6 6 6 
+            6 6 6 6 6 6 
+            6 6 6 6 6 6 
+            6 6 6 6 6 6 
+            6 6 6 6 6 6 
+            6 6 6 6 6 6 
+            . 6 6 6 6 . 
+            . . 6 6 . . 
+            `, SpriteKind.Treasure)
+        Treasure_Rowboat.setPosition(sprite.x, sprite.y)
+        Treasure_Rowboat.z = 0
+        EnemyCount += -1
+        if (EnemyCount == 0) {
+            ReFlag()
+        }
     }
 })
 sprites.onDestroyed(SpriteKind.CannonTower, function (sprite) {
@@ -4831,8 +4833,8 @@ sprites.onOverlap(SpriteKind.Boss_Cannonball, SpriteKind.Player, function (sprit
     }
 })
 function StartGame () {
-    Pause = false
     HUDdigits()
+    Pause = false
     if (Level == 1) {
         level1()
     } else if (Level == 2) {
@@ -5198,8 +5200,8 @@ sprites.onOverlap(SpriteKind.Boss_Wake, SpriteKind.Player, function (sprite, oth
     otherSprite.setVelocity(-75, randint(-50, 50))
 })
 let Caraval_Projectile: Sprite = null
-let EnemyCannonBall: Sprite = null
 let Boss_CannonBall: Sprite = null
+let EnemyCannonBall: Sprite = null
 let FlagSprite2: Sprite = null
 let CannonBall: Sprite = null
 let Boss_Loot: Sprite = null
@@ -5224,6 +5226,7 @@ let Update_Shop_2 = false
 let Update_Shop_3 = false
 let Shop_1: string[] = []
 let Ship_Damage = 0
+let Boss_Cannon_Reload = 0
 let Gust: Sprite = null
 let Rand_y = 0
 let Rand_x = 0
@@ -5279,7 +5282,6 @@ let Level = 0
 let Ship_Speed = 0
 let Reload_Time = 0
 let Ships_Destroyed = 0
-let Boss_Cannon_Reload = 0
 let Intro: Sprite = null
 let Pause = false
 Pause = true
@@ -5405,7 +5407,6 @@ Intro = sprites.create(img`
     99999999feeee999999999999999999999999999999999999999999999999999999999999999999944444999999999999999999999999999999999999999999999999999999999999999999999999999
     99999999feeee999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
     `, SpriteKind.Intro)
-Boss_Cannon_Reload = 10000
 Ships_Destroyed = 0
 Reload_Time = 1000
 Ship_Speed = 50
@@ -5477,70 +5478,6 @@ game.onUpdate(function () {
 game.onUpdate(function () {
     if (!(blockMenu.isMenuOpen()) && !(Pause)) {
         Orient_Cannons()
-    }
-})
-game.onUpdateInterval(Boss_Cannon_Reload, function () {
-    if (Boss_Stage == 3 && !(blockMenu.isMenuOpen())) {
-        if (sprites.readDataNumber(Boss_Cannon_East1, "Life") > 0 && Math.percentChance(75)) {
-            Boss_CannonBall = sprites.createProjectileFromSprite(img`
-                . . b b b b b . . 
-                . b c c c c c b . 
-                b c c c c b b c b 
-                b c c c c c b c b 
-                b c c c c c c c b 
-                b c c c c c c c b 
-                b c b c c c c c b 
-                . b c c c c c b . 
-                . . b b b b b . . 
-                `, Boss_Cannon_East1, -75, 0)
-            Boss_CannonBall.setKind(SpriteKind.Boss_Cannonball)
-            Boss_CannonBall.z = 4
-        }
-        if (sprites.readDataNumber(Boss_Cannon_East2, "Life") > 0 && Math.percentChance(75)) {
-            Boss_CannonBall = sprites.createProjectileFromSprite(img`
-                . . b b b b b . . 
-                . b c c c c c b . 
-                b c c c c b b c b 
-                b c c c c c b c b 
-                b c c c c c c c b 
-                b c c c c c c c b 
-                b c b c c c c c b 
-                . b c c c c c b . 
-                . . b b b b b . . 
-                `, Boss_Cannon_East2, -75, 0)
-            Boss_CannonBall.setKind(SpriteKind.Boss_Cannonball)
-            Boss_CannonBall.z = 4
-        }
-        if (sprites.readDataNumber(Boss_Cannon_East3, "Life") > 0 && Math.percentChance(75)) {
-            Boss_CannonBall = sprites.createProjectileFromSprite(img`
-                . . b b b b b . . 
-                . b c c c c c b . 
-                b c c c c b b c b 
-                b c c c c c b c b 
-                b c c c c c c c b 
-                b c c c c c c c b 
-                b c b c c c c c b 
-                . b c c c c c b . 
-                . . b b b b b . . 
-                `, Boss_Cannon_East3, -75, 0)
-            Boss_CannonBall.setKind(SpriteKind.Boss_Cannonball)
-            Boss_CannonBall.z = 4
-        }
-        if (sprites.readDataNumber(Boss_Cannon_East4, "Life") > 0 && Math.percentChance(75)) {
-            Boss_CannonBall = sprites.createProjectileFromSprite(img`
-                . . b b b b b . . 
-                . b c c c c c b . 
-                b c c c c b b c b 
-                b c c c c c b c b 
-                b c c c c c c c b 
-                b c c c c c c c b 
-                b c b c c c c c b 
-                . b c c c c c b . 
-                . . b b b b b . . 
-                `, Boss_Cannon_East4, -75, 0)
-            Boss_CannonBall.setKind(SpriteKind.Boss_Cannonball)
-            Boss_CannonBall.z = 4
-        }
     }
 })
 game.onUpdateInterval(1000, function () {
@@ -5712,6 +5649,70 @@ game.onUpdateInterval(1000, function () {
                 f f 
                 `, value14, (Ship.x - value14.x) * 1.25, (Ship.y - value14.y) * 1.25)
             EnemyCannonBall.setKind(SpriteKind.EnemyProjectile)
+        }
+    }
+})
+game.onUpdateInterval(1500, function () {
+    if (Boss_Stage == 3 && (!(blockMenu.isMenuOpen()) && BossCannon_count > 2)) {
+        if (sprites.readDataNumber(Boss_Cannon_East1, "Life") > 0 && Math.percentChance(75)) {
+            Boss_CannonBall = sprites.createProjectileFromSprite(img`
+                . . b b b b b . . 
+                . b c c c c c b . 
+                b c c c c b b c b 
+                b c c c c c b c b 
+                b c c c c c c c b 
+                b c c c c c c c b 
+                b c b c c c c c b 
+                . b c c c c c b . 
+                . . b b b b b . . 
+                `, Boss_Cannon_East1, -75, 0)
+            Boss_CannonBall.setKind(SpriteKind.Boss_Cannonball)
+            Boss_CannonBall.z = 4
+        }
+        if (sprites.readDataNumber(Boss_Cannon_East2, "Life") > 0 && Math.percentChance(75)) {
+            Boss_CannonBall = sprites.createProjectileFromSprite(img`
+                . . b b b b b . . 
+                . b c c c c c b . 
+                b c c c c b b c b 
+                b c c c c c b c b 
+                b c c c c c c c b 
+                b c c c c c c c b 
+                b c b c c c c c b 
+                . b c c c c c b . 
+                . . b b b b b . . 
+                `, Boss_Cannon_East2, -75, 0)
+            Boss_CannonBall.setKind(SpriteKind.Boss_Cannonball)
+            Boss_CannonBall.z = 4
+        }
+        if (sprites.readDataNumber(Boss_Cannon_East3, "Life") > 0 && Math.percentChance(75)) {
+            Boss_CannonBall = sprites.createProjectileFromSprite(img`
+                . . b b b b b . . 
+                . b c c c c c b . 
+                b c c c c b b c b 
+                b c c c c c b c b 
+                b c c c c c c c b 
+                b c c c c c c c b 
+                b c b c c c c c b 
+                . b c c c c c b . 
+                . . b b b b b . . 
+                `, Boss_Cannon_East3, -75, 0)
+            Boss_CannonBall.setKind(SpriteKind.Boss_Cannonball)
+            Boss_CannonBall.z = 4
+        }
+        if (sprites.readDataNumber(Boss_Cannon_East4, "Life") > 0 && Math.percentChance(75)) {
+            Boss_CannonBall = sprites.createProjectileFromSprite(img`
+                . . b b b b b . . 
+                . b c c c c c b . 
+                b c c c c b b c b 
+                b c c c c c b c b 
+                b c c c c c c c b 
+                b c c c c c c c b 
+                b c b c c c c c b 
+                . b c c c c c b . 
+                . . b b b b b . . 
+                `, Boss_Cannon_East4, -75, 0)
+            Boss_CannonBall.setKind(SpriteKind.Boss_Cannonball)
+            Boss_CannonBall.z = 4
         }
     }
 })
@@ -6383,6 +6384,70 @@ game.onUpdateInterval(1250, function () {
                 `, value, 0, 100)
             Caraval_Projectile.setPosition(value.x + -6, value.y)
             Caraval_Projectile.setKind(SpriteKind.EnemyProjectile)
+        }
+    }
+})
+game.onUpdateInterval(1200, function () {
+    if (Boss_Stage == 3 && (!(blockMenu.isMenuOpen()) && BossCannon_count <= 2)) {
+        if (sprites.readDataNumber(Boss_Cannon_East1, "Life") > 0 && Math.percentChance(75)) {
+            Boss_CannonBall = sprites.createProjectileFromSprite(img`
+                . . b b b b b . . 
+                . b c c c c c b . 
+                b c c c c b b c b 
+                b c c c c c b c b 
+                b c c c c c c c b 
+                b c c c c c c c b 
+                b c b c c c c c b 
+                . b c c c c c b . 
+                . . b b b b b . . 
+                `, Boss_Cannon_East1, -75, 0)
+            Boss_CannonBall.setKind(SpriteKind.Boss_Cannonball)
+            Boss_CannonBall.z = 4
+        }
+        if (sprites.readDataNumber(Boss_Cannon_East2, "Life") > 0 && Math.percentChance(75)) {
+            Boss_CannonBall = sprites.createProjectileFromSprite(img`
+                . . b b b b b . . 
+                . b c c c c c b . 
+                b c c c c b b c b 
+                b c c c c c b c b 
+                b c c c c c c c b 
+                b c c c c c c c b 
+                b c b c c c c c b 
+                . b c c c c c b . 
+                . . b b b b b . . 
+                `, Boss_Cannon_East2, -75, 0)
+            Boss_CannonBall.setKind(SpriteKind.Boss_Cannonball)
+            Boss_CannonBall.z = 4
+        }
+        if (sprites.readDataNumber(Boss_Cannon_East3, "Life") > 0 && Math.percentChance(75)) {
+            Boss_CannonBall = sprites.createProjectileFromSprite(img`
+                . . b b b b b . . 
+                . b c c c c c b . 
+                b c c c c b b c b 
+                b c c c c c b c b 
+                b c c c c c c c b 
+                b c c c c c c c b 
+                b c b c c c c c b 
+                . b c c c c c b . 
+                . . b b b b b . . 
+                `, Boss_Cannon_East3, -75, 0)
+            Boss_CannonBall.setKind(SpriteKind.Boss_Cannonball)
+            Boss_CannonBall.z = 4
+        }
+        if (sprites.readDataNumber(Boss_Cannon_East4, "Life") > 0 && Math.percentChance(75)) {
+            Boss_CannonBall = sprites.createProjectileFromSprite(img`
+                . . b b b b b . . 
+                . b c c c c c b . 
+                b c c c c b b c b 
+                b c c c c c b c b 
+                b c c c c c c c b 
+                b c c c c c c c b 
+                b c b c c c c c b 
+                . b c c c c c b . 
+                . . b b b b b . . 
+                `, Boss_Cannon_East4, -75, 0)
+            Boss_CannonBall.setKind(SpriteKind.Boss_Cannonball)
+            Boss_CannonBall.z = 4
         }
     }
 })
