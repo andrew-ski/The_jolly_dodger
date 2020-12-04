@@ -2903,6 +2903,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.East_Boss_Cannon, function (
     sprites.changeDataNumberBy(otherSprite, "Life", -1)
     if (sprites.readDataNumber(otherSprite, "Life") == 0) {
         BossCannon_count += -1
+        Boss_Cannon_Reload += -200
         otherSprite.destroy(effects.fire, 500)
         Boss_Rowboats()
     }
@@ -4530,6 +4531,7 @@ function Boss_Script2 () {
             `, SpriteKind.East_Boss_Cannon)
         sprites.setDataNumber(Boss_Cannon_East4, "Life", 14)
         Boss_Cannon_East4.z = 11
+        Boss_Cannon_Reload = 1500
         Dreadship_Wake = sprites.create(img`
             ...............1..1.............
             ..............1...1.............
@@ -4809,7 +4811,7 @@ function Boss_Script2 () {
         Boss_Loot.startEffect(effects.halo)
         Boss_Loot.setPosition(Ship.x, Ship.y + -100)
         scene.cameraFollowSprite(Boss_Loot)
-        Boss_Loot.follow(Ship, 10)
+        Boss_Loot.follow(Ship, 25)
         Ship.setPosition(80, 120)
         Boss_Stage = 5
     }
@@ -4842,9 +4844,6 @@ function StartGame () {
     } else if (Level == 5) {
         level5()
     }
-}
-function Spawn_Treasure () {
-	
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Rowboat, function (sprite, otherSprite) {
     otherSprite.destroy()
@@ -5188,7 +5187,7 @@ blockMenu.onMenuOptionSelected(function (option, index) {
             Shop_1[index] = "No Sea Shanties!"
         }
         Shop()
-    } else {
+    } else if (blockMenu.selectedMenuOption() == "Set Sail") {
         blockMenu.setControlsEnabled(false)
         blockMenu.closeMenu()
         StartGame()
@@ -5199,8 +5198,8 @@ sprites.onOverlap(SpriteKind.Boss_Wake, SpriteKind.Player, function (sprite, oth
     otherSprite.setVelocity(-75, randint(-50, 50))
 })
 let Caraval_Projectile: Sprite = null
-let Boss_CannonBall: Sprite = null
 let EnemyCannonBall: Sprite = null
+let Boss_CannonBall: Sprite = null
 let FlagSprite2: Sprite = null
 let CannonBall: Sprite = null
 let Boss_Loot: Sprite = null
@@ -5280,6 +5279,7 @@ let Level = 0
 let Ship_Speed = 0
 let Reload_Time = 0
 let Ships_Destroyed = 0
+let Boss_Cannon_Reload = 0
 let Intro: Sprite = null
 let Pause = false
 Pause = true
@@ -5405,6 +5405,7 @@ Intro = sprites.create(img`
     99999999feeee999999999999999999999999999999999999999999999999999999999999999999944444999999999999999999999999999999999999999999999999999999999999999999999999999
     99999999feeee999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999
     `, SpriteKind.Intro)
+Boss_Cannon_Reload = 10000
 Ships_Destroyed = 0
 Reload_Time = 1000
 Ship_Speed = 50
@@ -5476,6 +5477,70 @@ game.onUpdate(function () {
 game.onUpdate(function () {
     if (!(blockMenu.isMenuOpen()) && !(Pause)) {
         Orient_Cannons()
+    }
+})
+game.onUpdateInterval(Boss_Cannon_Reload, function () {
+    if (Boss_Stage == 3 && !(blockMenu.isMenuOpen())) {
+        if (sprites.readDataNumber(Boss_Cannon_East1, "Life") > 0 && Math.percentChance(75)) {
+            Boss_CannonBall = sprites.createProjectileFromSprite(img`
+                . . b b b b b . . 
+                . b c c c c c b . 
+                b c c c c b b c b 
+                b c c c c c b c b 
+                b c c c c c c c b 
+                b c c c c c c c b 
+                b c b c c c c c b 
+                . b c c c c c b . 
+                . . b b b b b . . 
+                `, Boss_Cannon_East1, -75, 0)
+            Boss_CannonBall.setKind(SpriteKind.Boss_Cannonball)
+            Boss_CannonBall.z = 4
+        }
+        if (sprites.readDataNumber(Boss_Cannon_East2, "Life") > 0 && Math.percentChance(75)) {
+            Boss_CannonBall = sprites.createProjectileFromSprite(img`
+                . . b b b b b . . 
+                . b c c c c c b . 
+                b c c c c b b c b 
+                b c c c c c b c b 
+                b c c c c c c c b 
+                b c c c c c c c b 
+                b c b c c c c c b 
+                . b c c c c c b . 
+                . . b b b b b . . 
+                `, Boss_Cannon_East2, -75, 0)
+            Boss_CannonBall.setKind(SpriteKind.Boss_Cannonball)
+            Boss_CannonBall.z = 4
+        }
+        if (sprites.readDataNumber(Boss_Cannon_East3, "Life") > 0 && Math.percentChance(75)) {
+            Boss_CannonBall = sprites.createProjectileFromSprite(img`
+                . . b b b b b . . 
+                . b c c c c c b . 
+                b c c c c b b c b 
+                b c c c c c b c b 
+                b c c c c c c c b 
+                b c c c c c c c b 
+                b c b c c c c c b 
+                . b c c c c c b . 
+                . . b b b b b . . 
+                `, Boss_Cannon_East3, -75, 0)
+            Boss_CannonBall.setKind(SpriteKind.Boss_Cannonball)
+            Boss_CannonBall.z = 4
+        }
+        if (sprites.readDataNumber(Boss_Cannon_East4, "Life") > 0 && Math.percentChance(75)) {
+            Boss_CannonBall = sprites.createProjectileFromSprite(img`
+                . . b b b b b . . 
+                . b c c c c c b . 
+                b c c c c b b c b 
+                b c c c c c b c b 
+                b c c c c c c c b 
+                b c c c c c c c b 
+                b c b c c c c c b 
+                . b c c c c c b . 
+                . . b b b b b . . 
+                `, Boss_Cannon_East4, -75, 0)
+            Boss_CannonBall.setKind(SpriteKind.Boss_Cannonball)
+            Boss_CannonBall.z = 4
+        }
     }
 })
 game.onUpdateInterval(1000, function () {
@@ -5647,70 +5712,6 @@ game.onUpdateInterval(1000, function () {
                 f f 
                 `, value14, (Ship.x - value14.x) * 1.25, (Ship.y - value14.y) * 1.25)
             EnemyCannonBall.setKind(SpriteKind.EnemyProjectile)
-        }
-    }
-})
-game.onUpdateInterval(1500, function () {
-    if (Boss_Stage == 3) {
-        if (sprites.readDataNumber(Boss_Cannon_East1, "Life") > 0 && Math.percentChance(50)) {
-            Boss_CannonBall = sprites.createProjectileFromSprite(img`
-                . . b b b b b . . 
-                . b c c c c c b . 
-                b c c c c b b c b 
-                b c c c c c b c b 
-                b c c c c c c c b 
-                b c c c c c c c b 
-                b c b c c c c c b 
-                . b c c c c c b . 
-                . . b b b b b . . 
-                `, Boss_Cannon_East1, -75, 0)
-            Boss_CannonBall.setKind(SpriteKind.Boss_Cannonball)
-            Boss_CannonBall.z = 4
-        }
-        if (sprites.readDataNumber(Boss_Cannon_East2, "Life") > 0 && Math.percentChance(50)) {
-            Boss_CannonBall = sprites.createProjectileFromSprite(img`
-                . . b b b b b . . 
-                . b c c c c c b . 
-                b c c c c b b c b 
-                b c c c c c b c b 
-                b c c c c c c c b 
-                b c c c c c c c b 
-                b c b c c c c c b 
-                . b c c c c c b . 
-                . . b b b b b . . 
-                `, Boss_Cannon_East2, -75, 0)
-            Boss_CannonBall.setKind(SpriteKind.Boss_Cannonball)
-            Boss_CannonBall.z = 4
-        }
-        if (sprites.readDataNumber(Boss_Cannon_East3, "Life") > 0 && Math.percentChance(50)) {
-            Boss_CannonBall = sprites.createProjectileFromSprite(img`
-                . . b b b b b . . 
-                . b c c c c c b . 
-                b c c c c b b c b 
-                b c c c c c b c b 
-                b c c c c c c c b 
-                b c c c c c c c b 
-                b c b c c c c c b 
-                . b c c c c c b . 
-                . . b b b b b . . 
-                `, Boss_Cannon_East3, -75, 0)
-            Boss_CannonBall.setKind(SpriteKind.Boss_Cannonball)
-            Boss_CannonBall.z = 4
-        }
-        if (sprites.readDataNumber(Boss_Cannon_East4, "Life") > 0) {
-            Boss_CannonBall = sprites.createProjectileFromSprite(img`
-                . . b b b b b . . 
-                . b c c c c c b . 
-                b c c c c b b c b 
-                b c c c c c b c b 
-                b c c c c c c c b 
-                b c c c c c c c b 
-                b c b c c c c c b 
-                . b c c c c c b . 
-                . . b b b b b . . 
-                `, Boss_Cannon_East4, -75, 0)
-            Boss_CannonBall.setKind(SpriteKind.Boss_Cannonball)
-            Boss_CannonBall.z = 4
         }
     }
 })
