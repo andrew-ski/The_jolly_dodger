@@ -1,6 +1,6 @@
 {
     "name": "The Jolly Dodger",
-    "version": "2.1.2",
+    "version": "2.2.0",
     "description": "",
     "dependencies": {
         "device": "*",
